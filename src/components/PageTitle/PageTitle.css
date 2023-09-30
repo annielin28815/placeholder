@@ -1,0 +1,22 @@
+.page-title {
+  z-index: 10;
+  font-size: 36px;
+  position: relative;
+  display: inline-block;
+}
+.page-title {
+  color: #025791;
+}
+.page-title:after {
+  background-color: #55d2f9;
+}
+.page-title:after {
+  content: "";
+  position: absolute;
+  height: 15px;
+  width: 102%;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}

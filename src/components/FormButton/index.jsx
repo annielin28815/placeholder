@@ -5,20 +5,20 @@ const FormButton = (props) => {
 
   const renderClassName = (props) => {
     if(props.status === 'normal') {
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-orange-500 bg-orange-500 hover:bg-orange-600 hover:border-2 hover:border-solid hover:border-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
+      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-cyan-700 bg-cyan-700 hover:bg-cyan-900 hover:border-2 hover:border-solid hover:border-cyan-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
     }else if(props.status === 'cancel' || props.status === 'back'){
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-orange-700 border-2 border-solid border-orange-500 hover:text-slate-200 hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
-    }else if(props.status === 'disabled') {
-      return 'cursor-not-allowed p-2 text-base font-semibold leading-6 rounded-md shadow-sm border-2 border-solid border-orange-300 text-slate-600 bg-orange-300 hover:text-slate-900 hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
+      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-cyan-700 border-2 border-solid border-cyan-700 hover:text-slate-200 hover:bg-cyan-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
+    }else if(props.status === 'disabled' || props.status === 'not-allow') {
+      return 'cursor-not-allowed p-2 text-base font-semibold leading-6 rounded-md shadow-sm border-2 border-solid border-cyan-300 text-slate-600 bg-cyan-300';
     }else if(props.status === 'focus') {
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-700 border-2 border-solid border-orange-600 bg-orange-600 hover:text-slate-300 hover:bg-orange-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
+      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-cyan-600 bg-cyan-600';
     }else {
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-orange-500 bg-orange-500 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
+      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-cyan-700 bg-cyan-500 hover:bg-cyan-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
     }
   }
 
     return (
-      <div className="form-input">
+      <div className="form-button">
         <button 
           type={props.type}
           disabled={props.disabled}

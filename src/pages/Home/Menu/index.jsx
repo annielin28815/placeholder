@@ -4,7 +4,9 @@ import './Menu.css';
 const Menu = () => {
 
     return (
-      <div>這是功能選單</div>
+      <div className="fixed top-5 left-5">
+        這是功能選單
+      </div>
     );
 };
 

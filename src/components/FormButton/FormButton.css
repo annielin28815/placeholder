@@ -1,0 +1,5 @@
+div.form-button button {
+  min-width: 80px;
+  width: 100%;
+  max-width: 120px;
+}

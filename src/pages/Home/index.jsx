@@ -1,15 +1,16 @@
 import React from 'react';
 import './Home.css';
-import Header from './Header';
-import Menu from './Menu';
 
 const Home = () => {
 
     return (
-      <div>
-        <Header />
-        <Menu />
-        這是首頁
+      <div className="overflow-hidden relative">
+        ffffff
+        {/* <div className="overflow-hidden relative max-w-md md:max-w-screen-md mx-auto">
+          <div className="border-x border-solid border-gray-900 my-0 p-5" style={{height: '100vh'}}>
+            <Header />
+          </div>
+        </div> */}
       </div>
     );
 };

@@ -39,8 +39,9 @@ div.form-item input:focus + span.placeholder {
 }
 div.form-item input:focus{
   color: #284B63;
-  border-color: #284B63;
-  padding: 8px 18px;
+  /* border-color: #284B63; */
+  margin: 6px 0px;
+  padding: 0px 18px;
 }
 div.form-item input:focus + span.placeholder {
   color: #284B63;
