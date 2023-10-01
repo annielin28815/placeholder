@@ -1,4 +1,4 @@
-div.form-item {
+/* div.form-item {
   position: relative;
   margin-top: 20px;
 }
@@ -39,11 +39,10 @@ div.form-item input:focus + span.placeholder {
 }
 div.form-item input:focus{
   color: #284B63;
-  /* border-color: #284B63; */
   margin: 6px 0px;
   padding: 0px 18px;
 }
 div.form-item input:focus + span.placeholder {
   color: #284B63;
   font-size: 1.1rem;
-}
+} */

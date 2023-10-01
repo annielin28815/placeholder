@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
+    "firebase": "^10.4.0",
     "react-toastify": "^9.1.3"
   }
 }

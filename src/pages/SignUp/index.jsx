@@ -26,11 +26,11 @@ const SignUp = () => {
               </div>
 
               <div className="col-span-12">
-                <FormInput text="Email" type="email" />
+                <FormInput text="Email" type="email" labelText="信箱" />
               </div>
 
               <div className="col-span-12">
-                <FormInput text="Password" type="password" />
+                <FormInput text="Password" type="password" labelText="密碼" />
               </div>
 
               <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
