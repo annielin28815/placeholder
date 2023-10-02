@@ -6,16 +6,15 @@ const FormInput = (props) => {
 
     return (
       <div className="form-item">
-        <label>{props.labelText}</label>
-        {/* <FormLabel labelText={props.labelText} /> */}
+        <FormLabel labelText={props.labelText} />
         <input 
           type={props.type} 
           name={props.text} 
           id={props.labelText}
           required 
           spellCheck="false"
-          placeholder={'請輸入' + props.labelText} 
-          className="block w-full rounded-md border-1 border-solid border-slate-400 py-1.5 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+          placeholder={'請輸入' + props.labelText}
+          className="border-2 border-slate-300 h-10 px-3 py-2 block w-full rounded-md text-left focus:outline-none focus:border-slate-600"
         />
       </div>
     );

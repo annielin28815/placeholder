@@ -4,7 +4,10 @@ import './FormLabel.css';
 const FormLabel = (props) => {
 
     return (
-      <label className="form-label font-bold text-base text-slate-950 tracking-wide">
+      <label
+        htmlFor={props.labelText}
+        className="block text-base font-semibold leading-6 text-gray-900 mb-2"
+      >
         {props.labelText}
       </label>
     );

@@ -16,7 +16,7 @@
   border-start-start-radius: 6px;
   border-end-start-radius: 6px;
 }
-[className^="role-radio"] [className^="role-radio"], [className*=" role-radio"] [className^="role-radio"], [className^="role-radio"] [className*=" role-radio"], [className*=" role-radio"] [className*=" role-radio"] {
+.role-radio-button-wrapper[className^="role-radio"] .role-radio-button-wrapper[className^="role-radio"], .role-radio-button-wrapper[className*=" role-radio"] .role-radio-button-wrapper[className^="role-radio"], .role-radio-button-wrapper[className^="role-radio"] .role-radio-button-wrapper[className*=" role-radio"], .role-radio-button-wrapper[className*=" role-radio"] .role-radio-button-wrapper[className*=" role-radio"] {
   box-sizing: border-box;
 }
 .role-radio-button-wrapper {
@@ -44,9 +44,6 @@
   z-index: -1;
   width: 100%;
   height: 100%;
-}
-[className^="role-radio"] [className^="role-radio"], [className*=" role-radio"] [className^="role-radio"], [className^="role-radio"] [className*=" role-radio"], [className*=" role-radio"] [className*=" role-radio"] {
-  box-sizing: border-box;
 }
 .role-radio-button-wrapper-checked:not(.role-radio-button-wrapper-disabled) {
   z-index: 1;
