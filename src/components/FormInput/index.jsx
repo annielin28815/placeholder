@@ -10,7 +10,8 @@ const FormInput = (props) => {
         <input 
           type={props.type} 
           name={props.text} 
-          id={props.labelText}
+          id={props.id}
+          onChange={props.onChange}
           required 
           spellCheck="false"
           placeholder={'請輸入' + props.labelText}

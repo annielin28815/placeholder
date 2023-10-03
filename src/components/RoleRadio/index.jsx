@@ -22,7 +22,7 @@ const RoleRadio = (props) => {
     return (
       <label className={renderLabel(props.checked)} htmlFor={props.labelText}>
         <span className={renderBox(props.checked)}>
-          <input className="role-radio-button-input" type="radio" value={props.value} checked={props.checked ? true : false} />
+          <input className="role-radio-button-input" type="radio" value={props.value} defaultChecked={props.checked ? true : false} />
             <span className="role-radio-button-inner"></span>
         </span>
         <span>{props.text}</span>
