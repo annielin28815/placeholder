@@ -1,14 +1,14 @@
 import React from 'react';
-import './ProductList.css';
+import './HowToUse.css';
 import PageTitle from '../../components/PageTitle';
 
-const ProductList = () => {
+const HowToUse = () => {
 
     return (
       <div>
-        <PageTitle text="商品列表頁" />
+        <PageTitle text="網站使用說明" />
       </div>
     );
 };
 
-export default ProductList;
+export default HowToUse;

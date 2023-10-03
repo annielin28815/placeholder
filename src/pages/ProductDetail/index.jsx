@@ -1,10 +1,13 @@
 import React from 'react';
 import './ProductDetail.css';
+import PageTitle from '../../components/PageTitle';
 
 const ProductDetail = () => {
 
     return (
-      <div>這是產品詳細頁</div>
+      <div>
+        <PageTitle text="單一商品介紹頁" />
+      </div>
     );
 };
 

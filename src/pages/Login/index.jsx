@@ -1,10 +1,13 @@
 import React from 'react';
 import './Login.css';
+import PageTitle from '../../components/PageTitle';
 
 const Login = () => {
 
     return (
-      <div>這是登入頁</div>
+      <div>
+        <PageTitle text="登入" />
+      </div>
     );
 };
 

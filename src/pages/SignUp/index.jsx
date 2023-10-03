@@ -79,11 +79,11 @@ const SignUp = () => {
             </div>
             
             <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
-              <FormButton type="button" status="other" disabled={false} onClickEvent={() => {}} text="以 Google 帳號登入" />
+              <FormButton type="button" status="other" disabled={false} onClickEvent={() => {}} text="以 Google 帳號註冊" />
             </div>
 
             <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
-              <FormButton type="button" status="other" disabled={false} onClickEvent={() => {}} text="以 Facebook 帳號登入" />
+              <FormButton type="button" status="other" disabled={false} onClickEvent={() => {}} text="以 Facebook 帳號註冊" />
             </div>
           </div>
         </div>
