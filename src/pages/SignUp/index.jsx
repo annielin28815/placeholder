@@ -10,7 +10,7 @@ import FormButton from '../../components/FormButton';
 import RoleRadio from '../../components/RoleRadio';
 
 import TitleDivide from '../../components/TitleDivide';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
@@ -49,7 +49,6 @@ const SignUp = () => {
   };
 
   function onChange(e) {
-    console.log(e);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
@@ -64,9 +63,12 @@ const SignUp = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password,
-        role
+        password
       );
+
+      updateProfile(auth.currentUser, {
+        displayName: role,
+      });
 
       const user = userCredential.user;
       showNotify("success", "註冊成功");
@@ -75,8 +77,15 @@ const SignUp = () => {
         email: "",
         password: "",
       })
+
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      console.log("user =>", user);
     } catch (error) {
       showNotify("error", "註冊失敗");
+      console.log("error =>", error);
     }
   };
 
