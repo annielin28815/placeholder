@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
 import { Bars3BottomRightIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import Menu from './components/Menu';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [pageState, setPageState] = useState("Sign in");
+  const [isLogin, setIsLogin] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState({role: 0});
+
+  const auth = getAuth();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLogin(true);
+        setCurrentUserData({
+          ...user,
+          role: user.displayName === "0" ? 0 : 1
+        });
+      } else {
+        setIsLogin(false);
+        setCurrentUserData({role: 0});
+      }
+    });
+  }, [auth]);
 
   const setSearchStatus = (boolean) => {
     setIsSearchOpen(boolean);
@@ -37,7 +58,7 @@ const Header = () => {
             </button>
           </div>
         </nav>
-        <Menu isOpen={isMenuOpen} className="max-w-7xl " />
+        <Menu isOpen={isMenuOpen} isLogin={isLogin} role={currentUserData.role} userData={currentUserData} className="max-w-7xl " />
       </div>
     </header>
   );

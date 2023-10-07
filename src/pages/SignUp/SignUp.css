@@ -9,3 +9,18 @@
     font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
     display: inline-block;
 }
+
+.d-inline-block{
+  display: inline-block;
+}
+.mask-img {
+  width: 128px;
+  height: auto;
+  display: block;
+}
+.un-choose {
+  width: 128px;
+  height: 183px;
+  background-color: rgb(255 255 255 / 80%);
+  bottom: 0;
+}
