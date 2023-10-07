@@ -7,8 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import PageTitle from '../../components/PageTitle';
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
-import FormRadio from '../../components/FormRadio';
-import RoleRadio from '../../components/RoleRadio';
 
 import TitleDivide from '../../components/TitleDivide';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, getRedirectResult, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
@@ -96,19 +94,17 @@ const SignUp = () => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-
-      // check for the user
-
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists()) {
         await setDoc(docRef, {
-          email: user.email,
-          timestamp: serverTimestamp(),
+          role: currentRole,
+          email: user.email
         });
         showNotify("success", "註冊成功");
       }
+      navigate("/");
     } catch (error) {
       showNotify("error", "註冊失敗");
       console.log("error =>", error);
@@ -129,12 +125,13 @@ const SignUp = () => {
 
       if (!docSnap.exists()) {
         await setDoc(docRef, {
-          email: user.email,
-          timestamp: serverTimestamp(),
+          role: currentRole,
+          email: user.email
         });
         showNotify("success", "註冊成功");
       }
 
+      navigate("/");
     } catch (error) {
       showNotify("error", "註冊失敗");
       console.log("error =>", error);
