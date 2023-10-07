@@ -3,8 +3,10 @@ import './Header.css';
 import { Bars3BottomRightIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import Menu from './components/Menu';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [pageState, setPageState] = useState("Sign in");
@@ -19,11 +21,13 @@ const Header = () => {
         setIsLogin(true);
         setCurrentUserData({
           ...user,
-          role: user.displayName === "0" ? 0 : 1
+          role: user.role == 0 ? 0 : 1
         });
+        setPageState("Sign in");
       } else {
         setIsLogin(false);
         setCurrentUserData({role: 0});
+        setPageState("Log out")
       }
     });
   }, [auth]);
@@ -41,7 +45,7 @@ const Header = () => {
       <div className="relative">
         <nav className="mx-auto flex max-w-7xl items-center justify-between mb-2 " aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5 flex items-center">
+            <a onClick={() => navigate("/")} className="-m-1.5 p-1.5 flex items-center">
               <img className="h-8 w-auto" src="https://img.icons8.com/windows/96/chair.png" alt="logo" />
               <span className="text-xl font-semibold leading-6 text-gray-900">好好訂位</span>
             </a>

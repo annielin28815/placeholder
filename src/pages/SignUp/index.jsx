@@ -9,7 +9,7 @@ import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 
 import TitleDivide from '../../components/TitleDivide';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, getRedirectResult, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDoc } from "firebase/firestore";
 
@@ -80,6 +80,7 @@ const SignUp = () => {
 
       const formDataCopy = { ...formData };
       delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
       await setDoc(doc(db, "users", user.uid), formDataCopy);
       showNotify("success", "註冊成功");
     } catch (error) {

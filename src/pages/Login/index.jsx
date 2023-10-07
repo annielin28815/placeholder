@@ -9,7 +9,7 @@ import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 
 import TitleDivide from '../../components/TitleDivide';
-import { getAuth, updateProfile, GoogleAuthProvider, getRedirectResult, FacebookAuthProvider, signInWithPopup, signInWithEmailAndPassword  } from "firebase/auth";
+import { getAuth, updateProfile, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithEmailAndPassword  } from "firebase/auth";
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDoc } from "firebase/firestore";
 
@@ -101,7 +101,8 @@ const Login = () => {
       if (!docSnap.exists()) {
         await setDoc(docRef, {
           role: currentRole,
-          email: user.email
+          email: user.email,
+          timestamp: serverTimestamp()
         });
         showNotify("success", "登入成功");
       }
@@ -124,7 +125,8 @@ const Login = () => {
       if (!docSnap.exists()) {
         await setDoc(docRef, {
           role: currentRole,
-          email: user.email
+          email: user.email,
+          timestamp: serverTimestamp()
         });
         showNotify("success", "登入成功");
       }
