@@ -41,9 +41,9 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white">
+    <header className="bg-white relative">
       <div className="relative">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between mb-2 " aria-label="Global">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-3 py-5" aria-label="Global">
           <div className="flex lg:flex-1">
             <a onClick={() => navigate("/")} className="-m-1.5 p-1.5 flex items-center">
               <img className="h-8 w-auto" src="https://img.icons8.com/windows/96/chair.png" alt="logo" />
@@ -62,7 +62,9 @@ const Header = () => {
             </button>
           </div>
         </nav>
-        <Menu isOpen={isMenuOpen} isLogin={isLogin} role={currentUserData.role} userData={currentUserData} className="max-w-7xl " />
+        {isMenuOpen &&
+          <Menu isLogin={isLogin} role={currentUserData.role} userData={currentUserData} />
+        }
       </div>
     </header>
   );

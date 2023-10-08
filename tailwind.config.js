@@ -11,7 +11,11 @@ module.exports = {
       '6': '6px',
       '8': '8px',
     },
-    extend: {},
+    extend: {
+      colors: {
+        'light-apricot': '#f5f4ef',
+      },
+    },
   },
   plugins: [],
 }

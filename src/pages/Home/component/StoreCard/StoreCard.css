@@ -1,0 +1,27 @@
+.store-card-group {
+  margin-bottom: 24px;
+  gap: 16px;
+}
+.store-card-group .card {
+  min-width: calc(50vw - 48px);
+  width: 100%;
+	max-width: 100%;
+  padding: 12px;
+  gap: 8px;
+}
+.store-card-group .card-content {
+  width: calc(100% - 58px);
+}
+.store-card-group .card div:first-of-type {
+  width: 50px;
+  height: 50px;
+}
+.store-card-group .card p{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 2rem;
+  height: 4rem;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

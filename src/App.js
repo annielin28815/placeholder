@@ -15,10 +15,10 @@ function App() {
     <Router>
       <main className="overflow-x-hidden relative">
         <div className="overflow-x-hidden relative max-w-md md:max-w-screen-md mx-auto ">
-          <div className="border-x border-solid border-gray-900 my-0 p-5">
+          <div className="border-x border-solid border-gray-900 my-0">
             <Header className="fixed top-0 z-20" />
           </div>
-          <div className="border-x border-solid border-gray-900 my-0 p-5 overflow-y-scroll" style={{height: 'calc(100vh - 80px)'}}>
+          <div className="main-page border-x border-solid border-gray-900 my-0 overflow-y-scroll" style={{height: 'calc(100vh - 80px)'}}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<SignUp />} />
