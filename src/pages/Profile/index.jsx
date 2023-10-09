@@ -10,35 +10,26 @@ import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
 import FormSelect from '../../components/FormSelect';
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDocs, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
 
 const Profile = () => {
   const auth = getAuth();
   const navigate = useNavigate();
-  const [currentRole, setCurrenRole] = useState(0);
-  const [formData, setFormData] = useState({});
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setFormData({
-          ...user,
-          id: user.uid,
-          role: 1
-        });
-      } else {
-        navigator("/")
-      }
-    });
-  }, [auth]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [formData, setFormData] = useState({
+    ...auth.currentUser,
+    role: 1,
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
+  });
+  const { name, email } = formData;
   
-
   const showNotify = (status, content) => {
     const notifySetting = {
       position: "top-center",
-      autoClose: false,
+      autoClose: true,
       hideProgressBar: false,
       newestOnTop: false,
       closeOnClick: true,
@@ -63,31 +54,31 @@ const Profile = () => {
     }));
   };
 
-  const onChooseRole = (e) => {
-    setCurrenRole(e)
-  }
-
   async function onSubmit(e) {
     e.preventDefault();
     console.log("formData =>", formData);
 
-    // try {
-    //   const auth = getAuth();
-    //   if (auth.currentUser.displayName !== role) {
-    //     //update display name in firebase auth
-    //     await updateProfile(auth.currentUser, {
-    //       displayName: role,
-    //     });
-    //     const docRef = doc(db, "users", auth.currentUser.uid);
-    //     await updateDoc(docRef, {
-    //       role,
-    //     });
-    //   }
-    //   showNotify("success", "更新成功");
-    // } catch (error) {
-    //   console.log("error =>", error);
-    //   showNotify("error", "更新失敗");
-    // }
+    try {
+      const auth = getAuth();
+      const docRef = doc(db, "users", auth.currentUser.uid);
+
+      if (auth.currentUser.displayName !== formData.name) {
+        await updateProfile(auth.currentUser, {
+          displayName: formData.name
+        });
+        await setDoc(docRef, {
+          role: 1 || null,
+          displayName: formData.name || null,
+          address: formData.address || null,
+          industry: "beauty" || null,
+          introduction: formData.introduction || null,
+          timestamp: serverTimestamp() || null,
+        });
+      }
+      showNotify("success", "更新成功");
+    } catch (error) {
+      showNotify("error", "更新失敗");
+    }
   };
 
   return (
@@ -129,8 +120,8 @@ const Profile = () => {
             </div>
           </div>
         </form>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </div>
   );
 };

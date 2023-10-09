@@ -12,8 +12,31 @@ import { doc, serverTimestamp, setDoc, getDoc, collection } from "firebase/fires
 const Home = () => {
 
   const categories = [
-    "handmade", "beauty", "art", "dessert", "hair", "nail"
-  ]
+    {
+      id: 1,
+      name: "handmade"
+    },
+    {
+      id: 2,
+      name: "beauty"
+    },
+    {
+      id: 3,
+      name: "art"
+    },
+    {
+      id: 4,
+      name: "dessert"
+    },
+    {
+      id: 5,
+      name: "hair"
+    },
+    {
+      id: 6,
+      name: "nail"
+    }
+  ];
 
   const stores = [
     {
@@ -84,7 +107,7 @@ const Home = () => {
         <ul className="category-card-group flex flex-wrap content-baseline overflow-hidden">
           {categories.length > 0 && categories.map((item) => {
             return (
-              <CategoryTag name={item} />
+              <CategoryTag name={item.name} key={item.id} />
             )
           })}
         </ul>
