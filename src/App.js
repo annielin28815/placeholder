@@ -6,9 +6,12 @@ import Header from './pages/Header';
 
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import PrivateRoute from './components/PrivateRoute';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import HowToUse from './pages/HowToUse';
+import Profile from './pages/Profile';
+import ReservationList from './pages/ReservationList';
 
 function App() {
   return (
@@ -23,6 +26,12 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
+
+              <Route path="/profile" element={<PrivateRoute />}>
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+              
+              <Route path="/reserveations" element={<ReservationList />} />
               <Route path="/howtouse" element={<HowToUse />} />
               <Route path="/products" element={<ProductList />}>
                 <Route path="/products/:id" element={<ProductDetail />} />

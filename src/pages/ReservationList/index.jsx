@@ -1,8 +1,8 @@
 import React from 'react';
-import './ReserveList.css';
+import './ReservationList.css';
 import PageTitle from '../../components/PageTitle';
 
-const ReserveList = () => {
+const ReservationList = () => {
 
     return (
       <div>
@@ -11,4 +11,4 @@ const ReserveList = () => {
     );
 };
 
-export default ReserveList;
+export default ReservationList;

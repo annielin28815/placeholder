@@ -4,7 +4,7 @@ import './StoreCard.css';
 const StoreCard = (props) => {
 
     return (
-      <li key={props.key} className="card box-border grow-0 shrink-0 flex rounded-2xl bg-gray-100 overflow-hidden cursor-pointer">
+      <li className="card box-border grow-0 shrink-0 flex rounded-2xl bg-gray-100 overflow-hidden cursor-pointer">
         <div className="rounded-full">
           <img className="w-full h-full object-fill rounded-full overflow-hidden" src={props.mainImg} />
         </div>

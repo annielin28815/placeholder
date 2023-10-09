@@ -3,7 +3,7 @@ import './Header.css';
 import { Bars3BottomRightIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import Menu from './components/Menu';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams  } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ const Header = () => {
   const [currentUserData, setCurrentUserData] = useState({role: 0});
 
   const auth = getAuth();
+  
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

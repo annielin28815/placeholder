@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState }  from 'react';
+import { useNavigate } from "react-router-dom";
 import './Menu.css';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 
 const Menu = (props) => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(true);
+
   const auth = getAuth();
   const onLogout = () => {
     auth.signOut();
@@ -16,45 +18,43 @@ const Menu = (props) => {
     <div className="block w-full absolute top-[72px] z-10">
       <div className="w-full">
         <div className=" grid grid-cols-1 justify-center p-4 bg-gray-300">
-          {props.isLogin === true &&
-            <div>
-              {props.role == 0 ?
-                <div className="row-span-2 mb-2 p-4 leading-normal border-2 border-solid border-slate-700 bg-gray-300 rounded shadow grid grid-rows-2 grid-flow-col gap-x-2 gap-y-2">
-                  <div className="row-span-2 col-span-4 flex justify-center items-center">
-                    <div className="w-10 h-10 rounded-full">
-                      <img className="w-full object-fill rounded-full" src="https://api.dicebear.com/7.x/thumbs/svg?seed=Loki" alt="avatar" />
-                    </div>
-                  </div>
-                  <div className="col-span-8 row-span-10">
-                    <p className="text-base font-bold">{props.userData.email}</p>
-                  </div>
-                  <div className="col-span-8 row-span-10">
-                    <p className="text-sm">您曾有<span className="font-semibold mx-1 text-zinc-700">3</span>筆預約紀錄</p>
-                  </div>
-                </div>:
-                <div className="row-span-2 mb-2 p-4 leading-normal border-2 border-solid border-slate-700 bg-gray-300 rounded shadow grid grid-rows-2 grid-flow-col gap-x-2 gap-y-2">
-                  <div className="row-span-2 col-span-4 flex justify-center items-center">
-                    <div className="w-10 h-10 rounded-full">
-                      <img className="w-full object-fill rounded-full" src="https://api.dicebear.com/7.x/thumbs/svg?seed=Misty&mouth=variant1,variant2,variant4,variant5&shapeColor=69d2e7,f1f4dc,f88c49" alt="avatar" />
-                    </div>
-                  </div>
-                  <div className="col-span-8 row-span-10">
-                    <p className="text-base font-bold">{props.userData.email}</p>
-                  </div>
-                  <div className="col-span-8 row-span-10">
-                    <p className="text-sm">已累積<span className="font-semibold mx-1 text-zinc-700">0</span>筆預約紀錄</p>
-                  </div>
+          {(props.isLogin === true && props.role == 0) &&
+            <div className="row-span-2 mb-2 p-4 leading-normal border-2 border-solid border-slate-700 bg-gray-300 rounded shadow grid grid-rows-2 grid-flow-col gap-x-2 gap-y-2">
+              <div className="row-span-2 col-span-4 flex justify-center items-center">
+                <div className="w-10 h-10 rounded-full">
+                  <img className="w-full object-fill rounded-full" src="https://api.dicebear.com/7.x/thumbs/svg?seed=Loki" alt="avatar" />
                 </div>
-              }
+              </div>
+              <div className="col-span-8 row-span-10">
+                <p className="text-base font-bold">{props.userData.email}</p>
+              </div>
+              <div className="col-span-8 row-span-10">
+                <p className="text-sm">您曾有<span className="font-semibold mx-1 text-zinc-700">3</span>筆預約紀錄</p>
+              </div>
+            </div>
+          }
+          {(props.isLogin === true && props.role == 1) &&
+            <div className="row-span-2 mb-2 p-4 leading-normal border-2 border-solid border-slate-700 bg-gray-300 rounded shadow grid grid-rows-2 grid-flow-col gap-x-2 gap-y-2">
+              <div className="row-span-2 col-span-4 flex justify-center items-center">
+                <div className="w-10 h-10 rounded-full">
+                  <img className="w-full object-fill rounded-full" src="https://api.dicebear.com/7.x/thumbs/svg?seed=Misty&mouth=variant1,variant2,variant4,variant5&shapeColor=69d2e7,f1f4dc,f88c49" alt="avatar" />
+                </div>
+              </div>
+              <div className="col-span-8 row-span-10">
+                <p className="text-base font-bold">{props.userData.email}</p>
+              </div>
+              <div className="col-span-8 row-span-10">
+                <p className="text-sm">已累積<span className="font-semibold mx-1 text-zinc-700">0</span>筆預約紀錄</p>
+              </div>
             </div>
           }
           {(props.isLogin === true && props.role == 0) &&
-            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/")}>
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/reserveations")}>
                 <p className="text-sm font-bold">預約紀錄</p>
             </div>
           }
           {(props.isLogin === true && props.role == 1) &&
-            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/")}>
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/profile")}>
               <p className="text-sm font-bold">資料維護</p>
               <div><ChevronRightIcon className="w-6 h-6" /></div>
             </div>
@@ -68,7 +68,7 @@ const Menu = (props) => {
           <div className="row-span-2 mb-2 py-1 flex items-center">
             <div className="w-full border-1 border-solid border-slate-700"></div>
           </div>
-          <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/")}>
+          <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center">
             <p className="text-sm font-bold">配色模式</p>
             <div>
               <label className="relative inline-flex items-center cursor-pointer">

@@ -1,30 +1,28 @@
 import React from 'react';
-import './FormSelect.css';
+import './FormTextarea.css';
 import FormLabel from '../FormLabel';
 
-const FormSelect = (props) => {
+const FormTextarea = (props) => {
 
     return (
       <div className="form-item">
         <FormLabel labelText={props.labelText} required={props.required} />
-        <select 
+        <textarea 
           type={props.type} 
           name={props.text} 
           id={props.id}
+          rows="5"
+          maxLength="100"
           onChange={props.onChange}
           disabled={props.disabled}
           required={props.required}
           spellCheck="false"
           placeholder={'請輸入 ' + props.labelText}
           title={'請輸入 ' + props.labelText}
-          className="border-2 border-slate-300 h-10 px-3 py-2 block w-full rounded-md text-left focus:outline-none focus:border-slate-600"
-        >
-          <option>United States</option>
-          <option>Canada</option>
-          <option>Mexico</option>
-        </select>
+          className="border-2 border-slate-300 px-3 py-2 block w-full rounded-md text-left focus:outline-none focus:border-slate-600"
+        />
       </div>
     );
 };
 
-export default FormSelect;
+export default FormTextarea;
