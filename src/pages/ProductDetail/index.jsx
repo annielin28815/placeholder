@@ -7,7 +7,6 @@ import FormInput from '../../components/FormInput';
 import FormLabel from '../../components/FormLabel';
 import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
-import FormCheckbox from '../../components/FormCheckbox';
 
 import { ToastContainer, toast } from 'react-toastify';
 

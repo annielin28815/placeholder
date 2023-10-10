@@ -10,7 +10,7 @@ import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
 import FormSelect from '../../components/FormSelect';
 
-import { getAuth, updateProfile } from "firebase/auth";
+import { getAuth, updateProfile, RecaptchaVerifier } from "firebase/auth";
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDocs, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
 
@@ -25,6 +25,9 @@ const Profile = () => {
     email: auth.currentUser.email,
   });
   const { name, email } = formData;
+  const [showOTPInput, setShowOTPInput] = useState(false);
+  const [errorPhoneMessage, setErrorPhoneMessage] = useState("請以全數字填寫，勿加入任何特殊符號。");
+  const [isFinished, setIsFinished] = useState(false);
   
   const showNotify = (status, content) => {
     const notifySetting = {
@@ -48,6 +51,44 @@ const Profile = () => {
   };
 
   const onChange = (e) => {
+    let hasCorrectPhone = false;
+    function isValidPhoneNumber(phoneNumber) {
+      if (phoneNumber.length !== 10) {// 檢查手機號碼的長度是否為 10
+        setErrorPhoneMessage("目前輸入格式不符")
+        return false;
+      }
+      if (phoneNumber[0] !== '0' || phoneNumber[0] !== '+') {// 檢查手機號碼的第一個數字是否為 0(+為測試用)
+        setErrorPhoneMessage("首字必須為0")
+        return false;
+      }
+      const regex = /^\d{3}\d{3}\d{4}$/;
+      if (!regex.test(phoneNumber)) {// 檢查手機號碼是否符合 XXXXXXXXXX 全數字的格式
+        setErrorPhoneMessage("請輸入數字")
+        return false;
+      }
+    
+      return true;
+    }
+
+    if(e.target.id === "phone") {
+      const phoneNumber = e.target.value;
+      if(isValidPhoneNumber(phoneNumber) === true){
+        hasCorrectPhone = true
+        setShowOTPInput(true)
+      }else {
+        hasCorrectPhone = false
+      }
+    }
+
+    // console.log(e.target.attributes.required);
+
+    let rules = e.target.id === "name" || e.target.id === "address" || e.target.id ===  "industry" || e.target.id === "introduction" || e.target.id === "phone" || e.target.id === "code"
+    if(rules && e.target.value !== null && e.target.value !== ""){
+      setIsFinished(true)
+    }else{
+      setIsFinished(false)
+    }
+
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
@@ -103,8 +144,13 @@ const Profile = () => {
               <FormTextarea text="Introduction" type="text" id="introduction" labelText="店家介紹" onChange={onChange} required  />
             </div>
             <div className="col-span-12">
-              <FormInput text="聯絡電話" type="text" id="lineID" labelText="聯絡電話" onChange={onChange} required  />
+              <FormInput text="聯絡電話" type="number" id="phone" labelText="聯絡電話(不可變更)" onChange={onChange} required  />
             </div>
+            {showOTPInput &&
+              <div className="col-span-12">
+                <FormInput text="簡訊驗證碼" type="number" id="code" labelText="簡訊驗證碼" onChange={onChange} required  />
+              </div>
+            }
             <div className="col-span-12">
               <FormInput text="Instagram 網址" type="text" id="instagramUrl" labelText="Instagram 網址" onChange={onChange}  />
             </div>
@@ -116,7 +162,7 @@ const Profile = () => {
             </div>
             
             <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
-              <FormButton type="submit" status="normal" disabled={false} onClickEvent={() => {}} text="更新" />
+              <FormButton type="submit" status={isFinished ? "normal" : "disabled"} disabled={isFinished ? false : true} onClickEvent={() => {}} text="更新" />
             </div>
           </div>
         </form>

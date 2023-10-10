@@ -6,7 +6,7 @@ const FormTextarea = (props) => {
 
     return (
       <div className="form-item">
-        <FormLabel labelText={props.labelText} required={props.required} />
+        <FormLabel for={props.id} labelText={props.labelText} required={props.required} />
         <textarea 
           type={props.type} 
           name={props.text} 

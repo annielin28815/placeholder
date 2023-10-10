@@ -5,7 +5,7 @@ const FormLabel = (props) => {
 
     return (
       <label
-        htmlFor={props.labelText}
+        htmlFor={props.id}
         className="block text-base font-semibold leading-6 text-gray-900 mb-2"
       >
         {props.required && <span className="text-rose-600 font-semibold mr-1">*</span>}
