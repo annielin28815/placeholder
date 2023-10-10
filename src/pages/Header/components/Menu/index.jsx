@@ -49,19 +49,26 @@ const Menu = (props) => {
             </div>
           }
           {(props.isLogin === true && props.role == 0) &&
-            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/reserveations")}>
-                <p className="text-sm font-bold">預約紀錄</p>
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/customer/reserveations")}>
+              <p className="text-sm font-bold">預約紀錄</p>
+              <div><ChevronRightIcon className="w-6 h-6" /></div>
             </div>
           }
           {(props.isLogin === true && props.role == 1) &&
-            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/profile")}>
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/studio/profile")}>
               <p className="text-sm font-bold">資料維護</p>
               <div><ChevronRightIcon className="w-6 h-6" /></div>
             </div>
           }
           {(props.isLogin === true && props.role == 1) &&
-            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/products")}>
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/studio/products")}>
               <p className="text-sm font-bold">服務項目</p>
+              <div><ChevronRightIcon className="w-6 h-6" /></div>
+            </div>
+          }
+          {(props.isLogin === true && props.role == 1) &&
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/studio/reserveations")}>
+              <p className="text-sm font-bold">預約紀錄</p>
               <div><ChevronRightIcon className="w-6 h-6" /></div>
             </div>
           }

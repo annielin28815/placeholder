@@ -12,6 +12,7 @@ import ProductDetail from './pages/ProductDetail';
 import HowToUse from './pages/HowToUse';
 import Profile from './pages/Profile';
 import ReservationList from './pages/ReservationList';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
   return (
@@ -32,10 +33,20 @@ function App() {
               </Route>
               
               <Route path="/reserveations" element={<ReservationList />} />
+
               <Route path="/howtouse" element={<HowToUse />} />
-              <Route path="/studio/products" element={<ProductList />}>
-                <Route path="/studio/products/:id" element={<ProductDetail />} />
-              </Route>
+              
+              <Route path="/studio/products" element={<ProductList />} />
+              <Route path="/studio/products/create" element={<ProductDetail />} />
+              <Route path="/studio/products/update/:id" element={<ProductDetail />} />
+              
+              <Route path="/studio/reserveations" element={<ProductList />} />
+              <Route path="/studio/reserveations/create" element={<ProductDetail />} />
+              
+              <Route path="/customer/reserveations" element={<ProductList />} />
+              <Route path="/customer/reserveations/create" element={<ProductDetail />} />
+
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </div>
         </div>
