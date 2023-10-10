@@ -5,10 +5,14 @@
   display: inline-block;
 }
 .page-title {
-  color: #025791;
+  --show-font: '',
+  --show-deco: '';
+  color: var(--show-font);
+  /* color: #025791; */
 }
 .page-title:after {
-  background-color: #55d2f9;
+  background-color: var(--show-deco);
+  /* background-color: #55d2f9; */
 }
 .page-title:after {
   content: "";

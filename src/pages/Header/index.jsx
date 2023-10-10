@@ -3,18 +3,60 @@ import './Header.css';
 import { Bars3BottomRightIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import Menu from './components/Menu';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useNavigate, useParams  } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
+
+import { db } from '../../firebase';
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
 
 const Header = () => {
   const navigate = useNavigate();
+  const auth = getAuth();
+  const location = useLocation();
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [pageState, setPageState] = useState("Sign in");
   const [isLogin, setIsLogin] = useState(false);
   const [currentUserData, setCurrentUserData] = useState({role: 0});
+  const [currentPathname, setCurrentPathname] = useState();
+  const [roleAvatarData, setRoleAvatarData] = useState(null);
 
-  const auth = getAuth();
-  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setPageState("Profile");
+      } else {
+        setPageState("Sign in");
+      }
+    });
+  }, [auth]);
+
+  // useEffect(() => {
+  //   async function fetchRoleAvatars() {
+  //     try {
+  //       const roleImgRef = collection(db, "roleAvatar")
+  //       const q = query(
+  //         roleImgRef,
+  //         orderBy("role", "asc")
+  //       );
+
+  //       const querySnapshot = await getDocs(q);
+
+  //       setRoleAvatarData(querySnapshot);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+
+  //   fetchRoleAvatars();
+  // }, []);
+
+  useEffect(() => {
+    setCurrentPathname(location.pathname)
+    if(location.pathname !== currentPathname) {
+      setIsMenuOpen(false)
+    }
+  }, [location]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

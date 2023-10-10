@@ -1,27 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation  } from "react-router-dom";
 import './PageTitle.css';
 
 const PageTitle = (props) => {
+  const location = useLocation();
+  const [currentStyle, setCurrentStyle] = useState({"--show-font": "#43341B", "--show-deco": "#e1e1e1"});
+  const [isLoading, setIsLoading] = useState(true);
 
-  const renderClassName = (props) => {
-    if(props.status === 'normal') {
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-orange-500 bg-orange-500 hover:bg-orange-600 hover:border-2 hover:border-solid hover:border-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
-    }else if(props.status === 'cancel' || props.status === 'back'){
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-orange-700 border-2 border-solid border-orange-500 hover:text-slate-200 hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
-    }else if(props.status === 'disabled') {
-      return 'cursor-not-allowed p-2 text-base font-semibold leading-6 rounded-md shadow-sm border-2 border-solid border-orange-300 text-slate-600 bg-orange-300 hover:text-slate-900 hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
-    }else if(props.status === 'focus') {
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-700 border-2 border-solid border-orange-600 bg-orange-600 hover:text-slate-300 hover:bg-orange-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
+  useEffect(() => {
+    setIsLoading(true)
+    if(location.pathname.includes("member")) {
+      setCurrentStyle({"--show-font": "#0d818d", "--show-deco": "#bbe9ed"});
+      setIsLoading(false);
+    }else if(location.pathname.includes("studio"))  {
+      setCurrentStyle({"--show-font": "#e96a1a", "--show-deco": "#fee8db"});
+      setIsLoading(false);
     }else {
-      return 'p-2 text-base font-semibold leading-6 rounded-md shadow-sm text-slate-200 border-2 border-solid border-orange-500 bg-orange-500 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
-    }
-  }
+      setCurrentStyle({"--show-font": "#43341B", "--show-deco": "#e1e1e1"});
+      setIsLoading(false);
+    };
+  }, [location]);
 
+  if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center py-5">
-        <h2 className="page-title text-center mx-auto">{props.text}</h2>
+      <div className="flex justify-center items-center" style={{height: '70vh'}}>
+        <div className="la-ball-fussion la-dark la-2x">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
+  }
+
+  return (
+    <div className="w-full flex justify-center items-center py-5">
+      <h2 className="page-title text-center mx-auto" style={currentStyle}>{props.text}</h2>
+    </div>
+  );
 };
 
 export default PageTitle;

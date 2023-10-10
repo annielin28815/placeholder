@@ -2,25 +2,30 @@
   padding: 0px 16px;
 }
 
+.overflow-x-scroll::-webkit-scrollbar,
 .overflow-y-scroll::-webkit-scrollbar {
   width: 7px;
 }
 
+.overflow-x-scroll::-webkit-scrollbar-button,
 .overflow-y-scroll::-webkit-scrollbar-button {
   background: transparent;
   border-radius: 4px;
 }
 
+.overflow-x-scroll::-webkit-scrollbar-track-piece,
 .overflow-y-scroll::-webkit-scrollbar-track-piece {
   background: transparent;
 }
 
+.overflow-x-scroll::-webkit-scrollbar-thumb,
 .overflow-y-scroll::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: transparent;
   border: 1px solid transparent;
 }
 
+.overflow-x-scroll::-webkit-scrollbar-track,
 .overflow-y-scroll::-webkit-scrollbar-track {
   box-shadow: transparent;
 }

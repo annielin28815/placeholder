@@ -27,14 +27,14 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
 
-              <Route path="/profile" element={<PrivateRoute />}>
-                <Route path="/profile" element={<Profile />} />
+              <Route path="/studio/profile" element={<PrivateRoute />}>
+                <Route path="/studio/profile" element={<Profile />} />
               </Route>
               
               <Route path="/reserveations" element={<ReservationList />} />
               <Route path="/howtouse" element={<HowToUse />} />
-              <Route path="/products" element={<ProductList />}>
-                <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/studio/products" element={<ProductList />}>
+                <Route path="/studio/products/:id" element={<ProductDetail />} />
               </Route>
             </Routes>
           </div>

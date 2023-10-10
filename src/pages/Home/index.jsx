@@ -104,7 +104,7 @@ const Home = () => {
     <div className="container mx-auto">
       <SectionTitle text="主分類" />
       <div className="overflow-x-scroll overflow-y-hidden">
-        <ul className="category-card-group flex flex-wrap content-baseline overflow-hidden">
+        <ul className="category-card-group my-3 flex flex-wrap content-baseline overflow-hidden">
           {categories.length > 0 && categories.map((item) => {
             return (
               <CategoryTag name={item.name} key={item.id} />
@@ -114,7 +114,7 @@ const Home = () => {
       </div>
       <SectionTitle text="最新加入店家" />
       <div className="overflow-x-scroll overflow-y-hidden">
-        <ul className="flex flex-wrap content-baseline store-card-group" >
+        <ul className="store-card-group my-5 flex flex-wrap content-baseline" >
           {stores.length > 0 && stores.map((item) => {
             return (
               <StoreCard key={item.id} mainImg={item.imgUrl} name={item.name} content={item.content} />
@@ -124,7 +124,7 @@ const Home = () => {
       </div>
       <SectionTitle text="最新服務項目" />
       <div className="overflow-x-scroll overflow-y-hidden">
-        <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 product-card-group" >
+        <ul className="product-card-group my-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4" >
           {products.length > 0 && products.map((item) => {
             return (
               <ProductCard key={item.id} mainImg={item.imgUrl} name={item.name} price={item.price} tags={item.tags} />
