@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './Profile.css';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
 import PageTitle from '../../components/PageTitle';
 import FormInput from '../../components/FormInput';
@@ -10,12 +11,13 @@ import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
 import FormSelect from '../../components/FormSelect';
 
-import { getAuth, updateProfile, RecaptchaVerifier } from "firebase/auth";
+import { getAuth, updateProfile, RecaptchaVerifier, signInWithPhoneNumber  } from "firebase/auth";
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDocs, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
 
 const Profile = () => {
   const auth = getAuth();
+
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,9 +27,13 @@ const Profile = () => {
     email: auth.currentUser.email,
   });
   const { name, email } = formData;
-  const [showOTPInput, setShowOTPInput] = useState(false);
-  const [errorPhoneMessage, setErrorPhoneMessage] = useState("請以全數字填寫，勿加入任何特殊符號。");
   const [isFinished, setIsFinished] = useState(false);
+  const [showErrorPhone, setShowErrorPhone] = useState(false);
+  const [errorPhoneMessage, setErrorPhoneMessage] = useState("請以全數字填寫，勿加入任何特殊符號。");
+  const [showOTPGenerateArea, setShowOTPGenerateArea] = useState(false);
+  const [showOTPInput, setShowOTPInput] = useState(false);
+  const [confirmObj, setConfirmObj] = useState({});
+  const [isCorrectOTP, setIsCorrectOTP] = useState(false);
   
   const showNotify = (status, content) => {
     const notifySetting = {
@@ -50,37 +56,83 @@ const Profile = () => {
     }
   };
 
+  const setUpRecaptha = (phoneNumber) => {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {}
+    );
+    recaptchaVerifier.render();
+    console.log("recaptchaVerifier =>", recaptchaVerifier);
+    return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+  };
+
+  const getRobot = async(e) => {
+    e.preventDefault();
+    let realPhone = formData.phone.substring(1);
+    let countryPhone = "+886" + realPhone;
+
+    try {
+      showNotify("success", "嗨！人類");
+      setShowOTPInput(true);
+      setConfirmObj(response);
+      const response = await setUpRecaptha(countryPhone);
+      console.log("setUpRecaptha response..... =>", response);
+      setShowOTPInput(false);
+    } catch (err) {
+      console.log(err);
+      showNotify("error", "目前無法驗證");
+    }
+  };
+
+  const verifyOtp = async (e) => {
+    e.preventDefault();
+    setShowOTPInput(false);
+
+    if (formData.OTPCode === "" || formData.OTPCode === null) return;
+    try {
+      await confirmObj.confirm(formData.OTPCode);
+      showNotify("success", "太棒了！已完成手機認證");
+      setIsCorrectOTP(true)
+    } catch (err) {
+      setIsCorrectOTP(false);
+      showNotify("error", err.message);
+    }
+  };
+
   const onChange = (e) => {
     let hasCorrectPhone = false;
     function isValidPhoneNumber(phoneNumber) {
-      if (phoneNumber.length !== 10) {// 檢查手機號碼的長度是否為 10
+      if (phoneNumber.length < 10) {// 檢查手機號碼的長度是否為 10(!==10)
+        setShowErrorPhone(true);
         setErrorPhoneMessage("目前輸入格式不符")
         return false;
       }
-      if (phoneNumber[0] !== '0' || phoneNumber[0] !== '+') {// 檢查手機號碼的第一個數字是否為 0(+為測試用)
+      if (phoneNumber[0] !== "0") {// 檢查手機號碼的第一個數字是否為 0(+為測試用)
+        setShowErrorPhone(true);
         setErrorPhoneMessage("首字必須為0")
         return false;
       }
       const regex = /^\d{3}\d{3}\d{4}$/;
       if (!regex.test(phoneNumber)) {// 檢查手機號碼是否符合 XXXXXXXXXX 全數字的格式
+        setShowErrorPhone(true);
         setErrorPhoneMessage("請輸入數字")
         return false;
       }
     
       return true;
-    }
+    };
 
     if(e.target.id === "phone") {
       const phoneNumber = e.target.value;
       if(isValidPhoneNumber(phoneNumber) === true){
-        hasCorrectPhone = true
-        setShowOTPInput(true)
+        hasCorrectPhone = true;
+        setShowOTPGenerateArea(true);
       }else {
         hasCorrectPhone = false
+        setShowErrorPhone(false);
       }
     }
-
-    // console.log(e.target.attributes.required);
 
     let rules = e.target.id === "name" || e.target.id === "address" || e.target.id ===  "industry" || e.target.id === "introduction" || e.target.id === "phone" || e.target.id === "code"
     if(rules && e.target.value !== null && e.target.value !== ""){
@@ -122,6 +174,7 @@ const Profile = () => {
     }
   };
 
+  console.log(showErrorPhone);
   return (
     <div>
       <PageTitle text="資料維護" />
@@ -146,9 +199,34 @@ const Profile = () => {
             <div className="col-span-12">
               <FormInput text="聯絡電話" type="number" id="phone" labelText="聯絡電話(不可變更)" onChange={onChange} required  />
             </div>
-            {showOTPInput &&
+            {showErrorPhone === true &&
+              <div className="col-span-12">{errorPhoneMessage}</div>
+            }
+            {showOTPGenerateArea === true &&
               <div className="col-span-12">
-                <FormInput text="簡訊驗證碼" type="number" id="code" labelText="簡訊驗證碼" onChange={onChange} required  />
+                <div className="grid grid-cols-12 gap-x-6 gap-y-2">
+                  <div className="col-span-5">
+                    <a onClick={getRobot} style={{lineHeight: '40px', color: '#3766d3'}}>開始驗證</a>
+                  </div>
+                  <div className="col-span-12">
+                    <div id="recaptcha-container" />
+                  </div>
+                </div>
+              </div>
+            }
+            {showOTPInput === true &&
+              <div className="col-span-12">
+                <div className="grid grid-cols-12 gap-x-6 gap-y-2">
+                  <div className="col-span-7">
+                    <FormInput text="簡訊驗證碼" type="number" id="OTPCode" labelText="簡訊驗證碼" onChange={onChange} required  />
+                  </div>
+                  <div className="col-span-5">
+                    {isCorrectOTP ?
+                      <span><CheckCircleIcon className="h-6 w-6 text-blue-600 font-bold mr-2" />已驗證完成</span>:
+                      <a onClick={verifyOtp} style={{lineHeight: '40px', color: '#3766d3'}}>確認驗證碼</a>
+                    }
+                  </div>
+                </div>
               </div>
             }
             <div className="col-span-12">

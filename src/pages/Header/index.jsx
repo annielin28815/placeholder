@@ -21,15 +21,15 @@ const Header = () => {
   const [currentPathname, setCurrentPathname] = useState();
   const [roleAvatarData, setRoleAvatarData] = useState(null);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setPageState("Profile");
-      } else {
-        setPageState("Sign in");
-      }
-    });
-  }, [auth]);
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setPageState("Profile");
+  //     } else {
+  //       setPageState("Sign in");
+  //     }
+  //   });
+  // }, [auth]);
 
   // useEffect(() => {
   //   async function fetchRoleAvatars() {
@@ -52,7 +52,7 @@ const Header = () => {
   // }, []);
 
   useEffect(() => {
-    setCurrentPathname(location.pathname)
+    setCurrentPathname(location.pathname);
     if(location.pathname !== currentPathname) {
       setIsMenuOpen(false)
     }

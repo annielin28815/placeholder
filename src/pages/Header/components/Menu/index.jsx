@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './Menu.css';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { getAuth } from "firebase/auth";
+import { UserPlusIcon } from '@heroicons/react/24/outline';
 
 const Menu = (props) => {
   const navigate = useNavigate();
@@ -18,6 +19,18 @@ const Menu = (props) => {
     <div className="block w-full absolute top-[72px] z-10">
       <div className="w-full">
         <div className=" grid grid-cols-1 justify-center p-4 bg-gray-300">
+          {(props.isLogin === false) &&
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/signup")}>
+              <p className="text-sm font-bold">嗨！第一次使用嗎？</p>
+              <div className="text-sm flex items-center">請點此註冊<ChevronRightIcon className="w-6 h-6 ml-2" /></div>
+            </div>
+          }
+          {(props.isLogin === false) &&
+            <div className="row-span-2 mb-2 p-4 leading-normal bg-white rounded shadow-md cursor-pointer flex justify-between items-center" onClick={() => navigate("/login")}>
+              <p className="text-sm font-bold">我已有帳號！</p>
+              <div className="text-sm flex items-center">請點此登入<ChevronRightIcon className="w-6 h-6 ml-2" /></div>
+            </div>
+          }
           {(props.isLogin === true && props.role == 0) &&
             <div className="row-span-2 mb-2 p-4 leading-normal border-2 border-solid border-slate-700 bg-gray-300 rounded shadow grid grid-rows-2 grid-flow-col gap-x-2 gap-y-2">
               <div className="row-span-2 col-span-4 flex justify-center items-center">
