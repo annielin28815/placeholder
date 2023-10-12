@@ -86,7 +86,7 @@ const Profile = () => {
   };
 
   const verifyOtp = async (e) => {
-    e.preventDefault();
+    e.preventDeault();
     setShowOTPInput(false);
 
     if (formData.OTPCode === "" || formData.OTPCode === null) return;

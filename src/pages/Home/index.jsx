@@ -5,6 +5,7 @@ import SectionTitle from './component/SectionTitle';
 import CategoryTag from './component/CategoryTag';
 import StoreCard from './component/StoreCard';
 import ProductCard from './component/ProductCard';
+import Footer from '../Footer';
 
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDoc, collection } from "firebase/firestore";
@@ -102,7 +103,7 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-      <SectionTitle text="主分類" />
+      <SectionTitle text="主分類" hasAll={false} />
       <div className="overflow-x-scroll overflow-y-hidden">
         <ul className="category-card-group my-3 flex flex-wrap content-baseline overflow-hidden">
           {categories.length > 0 && categories.map((item) => {
@@ -112,7 +113,7 @@ const Home = () => {
           })}
         </ul>
       </div>
-      <SectionTitle text="最新加入店家" />
+      <SectionTitle text="最新加入店家" hasAll={false} />
       <div className="overflow-x-scroll overflow-y-hidden">
         <ul className="store-card-group my-5 flex flex-wrap content-baseline" >
           {stores.length > 0 && stores.map((item) => {
@@ -122,7 +123,7 @@ const Home = () => {
           })}
         </ul>
       </div>
-      <SectionTitle text="最新服務項目" />
+      <SectionTitle text="最新服務項目" link={true} hasAll={true} />
       <div className="overflow-x-scroll overflow-y-hidden">
         <ul className="product-card-group my-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4" >
           {products.length > 0 && products.map((item) => {
@@ -132,6 +133,8 @@ const Home = () => {
           })}
         </ul>
       </div>
+
+      <Footer />
     </div>
   );
 };
