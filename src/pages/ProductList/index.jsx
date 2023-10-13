@@ -1,69 +1,104 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import './ProductList.css';
 import PageTitle from '../../components/PageTitle';
-import emptyFolder from "../../assets/images/Empty-folder.png";
-import ActionButton from '../../components/ActionButton';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import ProductCard from './components/ProductCard';
+import Empty from './components/Empty';
+import StudioTable from './components/StudioTable';
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ProductList = () => {
-  const navigate = useNavigate();
+  const auth = getAuth();
+  const location = useLocation();
+
   const [hasProduct, setHasProduct] = useState(false);
+  const [pageState, setPageState] = useState("Sign in");
+  const [isLogin, setIsLogin] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState({role: 0});
+  const products = [
+    {
+      id: 1,
+      name: "手作金工體驗-做一個自己的手環",
+      tags: ["宜送禮", "金工"],
+      price: 200,
+      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
+      imgUrl: "https://lh4.googleusercontent.com/DPBQfndvEskF1goBB0GqMmPyaeekNOE21QC5Xw9G_haLaxOKaxhWZJJVbPmo1ailQtuKt00OCN6OJk2i7VnQ5T5O4XNwr6yUJRPHAghf3WYV89rFY8ctxwr4yBGHFbZXlRuylQEm"
+    },
+    {
+      id: 2,
+      name: "韓式多層次睫毛嫁接",
+      tags: ["變漂亮"],
+      price: 200,
+      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
+      imgUrl: "https://www.angel-eyelash.tw/assets/images/eyelash-extensions-suitable.jpg"
+    },
+    {
+      id: 3,
+      name: "手作蛋糕體驗-自己做蛋糕",
+      tags: ["就是想吃", "儀式感"],
+      price: 200,
+      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
+      imgUrl: "https://lh3.googleusercontent.com/p/AF1QipNGdLnhyzXARarxR1YVAdJ1OOOY1gCYL8b9u_2N=s680-w680-h510"
+    },
+    {
+      id: 4,
+      name: "指甲彩繪-讓指甲穿新衣",
+      tags: [ "變漂亮"],
+      price: 200,
+      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
+      imgUrl: "https://tuanuu.tw/wp-content/uploads/20171011223452_99.jpg"
+    },
+  ];
+
+  useEffect(() => {
+    if(location.pathname.includes("customer")) {
+      setCurrentUserData({role: 0});
+    }else if(location.pathname.includes("studio"))  {
+      setCurrentUserData({role: 1});
+    }else {
+      setCurrentUserData({role: 0});
+    };
+  }, [location]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLogin(true);
+        setCurrentUserData({
+          ...user,
+          role: user.role == 0 ? 0 : 1
+        });
+        setPageState("Sign in");
+      } else {
+        setIsLogin(false);
+        setCurrentUserData({role: 0});
+        setPageState("Sign out")
+      }
+    });
+  }, [auth]);
 
     return (
       <div>
         <PageTitle text="服務項目列表頁" />
-        {/* {hasProduct === false &&
-          <div className="mt-5 flex flex-col justify-center items-center">
-            <div className="my-5">
-              <ActionButton type="button" status="normal" disabled={false} userRole={1} onClickEvent={() => navigate('/studio/products/create')} text="開始新增" />
-            </div>
-            <div className="max-w-xs overflow-hidden mt-5">
-              <img src={emptyFolder} className="w-full object-fill" alt="empty-image" />
-            </div>
-          </div>
+        {/* {(currentUserData.role === 1 && hasProduct === false) &&
+          <Empty />
         } */}
         
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" className="px-6 py-3">
-                            名稱
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            <span className="">操作</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr className="bg-white border-b dark:bg-gray-300 dark:border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          手作 6 吋提拉米蘇蛋糕體驗
-                        </th>
-                        <td className="px-6 py-4 text-right">
-                          <a href="#" className="font-medium text-gray-600 hover:underline"><PencilIcon className="h-6 w-6" /></a>
-                        </td>
-                    </tr>
-                    <tr className="bg-white border-b dark:bg-gray-300 dark:border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          手作 6 吋提拉米蘇蛋糕體驗
-                        </th>
-                        <td className="px-6 py-4 text-right">
-                            <a href="#" className="font-medium text-gray-600 hover:underline"><PencilIcon className="h-6 w-6" /></a>
-                        </td>
-                    </tr>
-                    <tr className="bg-white dark:bg-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          手作 6 吋提拉米蘇蛋糕體驗
-                        </th>
-                        <td className="px-6 py-4 text-right">
-                            <a href="#" className="font-medium text-gray-600 hover:underline"><PencilIcon className="h-6 w-6" /></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        {/* {(currentUserData.role === 1 && hasProduct === false) &&
+              <StudioTable />
+        } */}
+
+        {(currentUserData.role === 0 && hasProduct === false) &&
+          <ul className="product-card-group my-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4" >
+            {products.length > 0 && products.map((item) => {
+              return (
+                <ProductCard key={item.id} mainImg={item.imgUrl} name={item.name} price={item.price} tags={item.tags} />
+              )
+            })}
+          </ul>
+        }
       </div>
     );
 };

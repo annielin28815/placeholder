@@ -9,7 +9,7 @@ const PageTitle = (props) => {
 
   useEffect(() => {
     setIsLoading(true)
-    if(location.pathname.includes("member")) {
+    if(location.pathname.includes("customer")) {
       setCurrentStyle({"--show-font": "#0d818d", "--show-deco": "#bbe9ed"});
       setIsLoading(false);
     }else if(location.pathname.includes("studio"))  {
