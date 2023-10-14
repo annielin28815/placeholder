@@ -41,6 +41,7 @@ function App() {
               <Route path="/studio/products/update/:id" element={<ProductDetail />} />
               
               <Route path="/customer/products" element={<ProductList />} />
+              <Route path="/customer/products/:id" element={<ProductDetail />} />
 
               <Route path="/studio/reserveations" element={<ProductList />} />
               <Route path="/studio/reserveations/create" element={<ProductDetail />} />

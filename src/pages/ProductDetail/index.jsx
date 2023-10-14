@@ -7,25 +7,65 @@ import FormInput from '../../components/FormInput';
 import FormLabel from '../../components/FormLabel';
 import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
+import SectionTitle from './components/SectionTitle';
 
 import { ToastContainer, toast } from 'react-toastify';
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 const ProductDetail = () => {
+  const auth = getAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
   const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [currentID, setCurrentID] = useState("");
   const [pageState, setPageState] = useState("create");
+  const [isLogin, setIsLogin] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState("");
+  const [currentUserData, setCurrentUserData] = useState({role: 0});
+
+  const tags = [
+    "宜送禮", "動手做"
+  ]
 
   useEffect(() => {
-    setCurrentID(params.id)
+    setCurrentID(params.id);
     if(location.pathname.includes("update")) {
       setPageState("update");
+      setCurrentTitle("更新服務項目");
     } else {
       setPageState("create");
+      setCurrentTitle("新增服務項目");
     }
+
+    if(location.pathname.includes("customer")) {
+      setCurrentUserData({role: 0});
+      setCurrentTitle("服務項目詳情");
+    }else if(location.pathname.includes("studio"))  {
+      setCurrentUserData({role: 1});
+    }else {
+      setCurrentUserData({role: 0});
+    };
   }, [location]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLogin(true);
+        setCurrentUserData({
+          ...user,
+          role: user.role == 0 ? 0 : 1
+        });
+        setPageState("Sign in");
+      } else {
+        setIsLogin(false);
+        setCurrentUserData({role: 0});
+        setPageState("Sign out")
+      }
+    });
+  }, [auth]);
 
   const showNotify = (status, content) => {
     const notifySetting = {
@@ -59,51 +99,89 @@ const ProductDetail = () => {
 
   }
 
+
   return (
     <div>
-      <PageTitle text="新增服務項目" />
-      <form onSubmit={onSubmit}>
-        <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
-          <div className="col-span-12">
-            <FormInput text="Name" type="text" id="name" labelText="名稱" defaultValue="手作 6 吋提拉米蘇蛋糕體驗" onChange={onChange} required  />
-          </div>
-          <div className="col-span-12">
-            <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" defaultValue="好吃的蛋糕不要再用買的，都自己做吧！我們會提供全部器材與材料，帶著一顆愉悅的心即可預約體驗唷！" onChange={onChange} required  />
-          </div>
-          <div className="col-span-12">
-            <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" defaultValue="https://unsplash.com/photos/kPxsqUGneXQ" onChange={onChange} required  />
-          </div>
-          <div className="col-span-12">
-            <FormInput text="Deposit" type="number" id="price" labelText="訂金(單位：新臺幣)" defaultValue="300" onChange={onChange} required  />
-          </div>
-          <div className="col-span-12">
-            <FormInput text="url" type="url" id="otherUrl" labelText="相關作品集(網址)" defaultValue="" onChange={onChange}  />
-          </div>
-          <div className="col-span-12">
-            <FormLabel labelText="相關標籤(可複選)" required={false} />
-            <fieldset className="grid grid-cols-4 gap-3">
-              <div className="flex items-center ml-1 mb-4">
-                  <input id="checkbox-1" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                  <label htmlFor="checkbox-1" className="ml-2 text-sm font-medium text-gray-900">變好看</label>
+      <PageTitle text={currentTitle} />
+      {(currentUserData.role === 1 && pageState === "update") &&
+        <div>
+          <form onSubmit={onSubmit}>
+            <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
+              <div className="col-span-12">
+                <FormInput text="Name" type="text" id="name" labelText="名稱" defaultValue="手作 6 吋提拉米蘇蛋糕體驗" onChange={onChange} required  />
               </div>
-              <div className="flex items-center ml-1 mb-4">
-                  <input id="checkbox-2" type="checkbox" value="art" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                  <label htmlFor="checkbox-2" className="ml-2 text-sm font-medium text-gray-900">變文青</label>
+              <div className="col-span-12">
+                <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" defaultValue="好吃的蛋糕不要再用買的，都自己做吧！我們會提供全部器材與材料，帶著一顆愉悅的心即可預約體驗唷！" onChange={onChange} required  />
               </div>
-              <div className="flex items-center ml-1 mb-4">
-                  <input checked id="checkbox-3" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                  <label htmlFor="checkbox-3" className="ml-2 text-sm font-medium text-gray-900">宜送禮</label>
+              <div className="col-span-12">
+                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" defaultValue="https://unsplash.com/photos/kPxsqUGneXQ" onChange={onChange} required  />
               </div>
-            </fieldset>
+              <div className="col-span-12">
+                <FormInput text="Deposit" type="number" id="price" labelText="訂金(單位：新臺幣)" defaultValue="300" onChange={onChange} required  />
+              </div>
+              <div className="col-span-12">
+                <FormInput text="url" type="url" id="otherUrl" labelText="相關作品集(網址)" defaultValue="" onChange={onChange}  />
+              </div>
+              <div className="col-span-12">
+                <FormLabel labelText="相關標籤(可複選)" required={false} />
+                <fieldset className="grid grid-cols-4 gap-3">
+                  <div className="flex items-center ml-1 mb-4">
+                      <input id="checkbox-1" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                      <label htmlFor="checkbox-1" className="ml-2 text-sm font-medium text-gray-900">變好看</label>
+                  </div>
+                  <div className="flex items-center ml-1 mb-4">
+                      <input id="checkbox-2" type="checkbox" value="art" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                      <label htmlFor="checkbox-2" className="ml-2 text-sm font-medium text-gray-900">變文青</label>
+                  </div>
+                  <div className="flex items-center ml-1 mb-4">
+                      <input checked id="checkbox-3" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                      <label htmlFor="checkbox-3" className="ml-2 text-sm font-medium text-gray-900">宜送禮</label>
+                  </div>
+                </fieldset>
+              </div>
+              
+              <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
+                <FormButton type="cancel" status="cancel" disabled={false} text="取消" />
+                <FormButton type="submit" status="normal" disabled={false} text={pageState === "create" ? "送出": "更新"} />
+              </div>
+            </div>
+          </form>
+          <ToastContainer />
+        </div>
+      }
+
+      {(currentUserData.role === 0) &&
+        <div className="relative">
+          <SectionTitle text="手作 6 吋提拉米蘇蛋糕體驗" />
+          <div className="w-full">
+            <img src="https://lh3.googleusercontent.com/p/AF1QipMEs6SG8F0pCtrRJ0jaHSf04RSecF5imbcL1g6l=s680-w680-h510" alt="main-img" />
           </div>
-          
-          <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
-            <FormButton type="cancel" status="cancel" disabled={false} text="取消" />
-            <FormButton type="submit" status="normal" disabled={false} text={pageState === "create" ? "送出": "更新"} />
+          <div className="my-2 text-gray-800">
+            <p>好吃的蛋糕不要再用買的，都自己做吧！我們會提供全部器材與材料，帶著一顆愉悅的心即可預約體驗唷！</p>
+          </div>
+          <SectionTitle text="店家資訊" />
+          <div>
+            <ul>
+              <li>&#9830; 店家名稱：Annie 烘焙點心體驗店</li>
+              <li>&#9830; 店家地址：臺北市南港區</li>
+              <li>&#9830; 關聯標籤：
+                {tags.length > 0 && tags.map((item) => {
+                  return (
+                    <span className="inline-block tag bg-gray-200 rounded-full p-1 text-xs font-semibold text-gray-700 mr-1">#{item}</span>
+                  )
+                })}
+              </li>
+              <li>&#9830; 所需時間：約<span className='font-bold px-1'>3</span>小時</li>
+              <li>&#9830; 預約費用：新臺幣<span className='font-bold px-1'>300</span>元</li>
+            </ul>
+          </div>
+          <div className="flex justify-center items-center my-3">
+            <button type="button" className="w-full flex justify-center items-center text-sky-100 bg-cyan-800 px-3 py-3 rounded-full">
+              <span className="text-sm">開始預約</span>
+            </button>
           </div>
         </div>
-      </form>
-      <ToastContainer />
+      }
     </div>
   );
 };
