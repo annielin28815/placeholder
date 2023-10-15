@@ -8,6 +8,7 @@ import FormLabel from '../../components/FormLabel';
 import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
 import SectionTitle from './components/SectionTitle';
+import EnableTable from './components/EnableTable';
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -151,7 +152,7 @@ const ProductDetail = () => {
       }
 
       {(currentUserData.role === 0) &&
-        <div className="relative">
+        <div className="mb-3">
           <SectionTitle text="手作 6 吋提拉米蘇蛋糕體驗" />
           <div className="w-full">
             <img src="https://lh3.googleusercontent.com/p/AF1QipMEs6SG8F0pCtrRJ0jaHSf04RSecF5imbcL1g6l=s680-w680-h510" alt="main-img" />
@@ -159,11 +160,8 @@ const ProductDetail = () => {
           <div className="my-2 text-gray-800">
             <p>好吃的蛋糕不要再用買的，都自己做吧！我們會提供全部器材與材料，帶著一顆愉悅的心即可預約體驗唷！</p>
           </div>
-          <SectionTitle text="店家資訊" />
           <div>
             <ul>
-              <li>&#9830; 店家名稱：Annie 烘焙點心體驗店</li>
-              <li>&#9830; 店家地址：臺北市南港區</li>
               <li>&#9830; 關聯標籤：
                 {tags.length > 0 && tags.map((item) => {
                   return (
@@ -174,6 +172,23 @@ const ProductDetail = () => {
               <li>&#9830; 所需時間：約<span className='font-bold px-1'>3</span>小時</li>
               <li>&#9830; 預約費用：新臺幣<span className='font-bold px-1'>300</span>元</li>
             </ul>
+          </div>
+          <SectionTitle text="店家資訊" />
+          <div>
+            <ul>
+              <li>&#9830; 店家名稱：Annie 烘焙點心體驗店</li>
+              <li>&#9830; 店家地址：臺北市南港區</li>
+            </ul>
+          </div>
+          <SectionTitle text="目前可供預約日期(本月)" />
+          <div className="pb-3">
+            <EnableTable dateData="" />
+          </div>
+          <SectionTitle text="目前可供預約時段" />
+          <div className="flex items-center pb-3">
+            <span className="inline-block tag bg-cyan-200 rounded-full p-2 text-xs font-semibold text-gray-400 mr-1">09:00~12:00</span>
+            <span className="inline-block tag bg-cyan-200 rounded-full p-2 text-xs font-semibold text-gray-700 mr-1">14:00~17:00</span>
+            <span className="inline-block tag bg-cyan-200 rounded-full p-2 text-xs font-semibold text-gray-700 mr-1">19:00~22:00</span>
           </div>
           <div className="flex justify-center items-center my-3">
             <button type="button" className="w-full flex justify-center items-center text-sky-100 bg-cyan-800 px-3 py-3 rounded-full">

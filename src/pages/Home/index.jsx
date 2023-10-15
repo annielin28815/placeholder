@@ -5,7 +5,7 @@ import SectionTitle from './component/SectionTitle';
 import CategoryTag from './component/CategoryTag';
 import StoreCard from './component/StoreCard';
 import ProductCard from './component/ProductCard';
-import Footer from '../Footer';
+
 
 import { db } from '../../firebase';
 import { doc, serverTimestamp, setDoc, getDoc, collection } from "firebase/firestore";
@@ -134,7 +134,7 @@ const Home = () => {
         </ul>
       </div>
 
-      <Footer />
+      
     </div>
   );
 };

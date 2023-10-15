@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Header from './pages/Header';
+import Footer from './pages/Footer';
 
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
@@ -51,6 +52,7 @@ function App() {
 
               <Route path="*" element={<PageNotFound />} />
             </Routes>
+            <Footer />
           </div>
         </div>
       </main>
