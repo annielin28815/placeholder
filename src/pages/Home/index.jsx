@@ -6,65 +6,63 @@ import CategoryTag from './component/CategoryTag';
 import StoreCard from './component/StoreCard';
 import ProductCard from './component/ProductCard';
 
-
 import { db } from '../../firebase';
-import { doc, serverTimestamp, setDoc, getDoc, collection } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc, getDoc, collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 
 const Home = () => {
+  const [categories, setCategories] = useState([]);
+  const [stores, setStores] = useState([]);
 
-  const categories = [
-    {
-      id: 1,
-      name: "handmade"
-    },
-    {
-      id: 2,
-      name: "beauty"
-    },
-    {
-      id: 3,
-      name: "art"
-    },
-    {
-      id: 4,
-      name: "dessert"
-    },
-    {
-      id: 5,
-      name: "hair"
-    },
-    {
-      id: 6,
-      name: "nail"
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const categoriesRef = collection(db, "categories");
+        const q = query(
+          categoriesRef,
+          limit(5)
+        );
+        const querySnap = await getDocs(q);
+        const categories = [];
+        querySnap.forEach((doc) => {
+          return categories.push({
+            id: doc.id,
+            name: doc.data().name,
+          });
+        });
+        setCategories(categories);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  ];
 
-  const stores = [
-    {
-      id: 1,
-      name: "Annie's shop",
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://api.dicebear.com/7.x/open-peeps/svg?seed=Callie&face=awe,blank,calm,cheeky,concerned,concernedFear,contempt,cute,cyclops,driven,eatingHappy,explaining,eyesClosed,fear,hectic,lovingGrin1,lovingGrin2,monster,old,rage,serious,smile,smileBig,smileLOL,smileTeethGap,solemn,suspicious,tired,veryAngry"
-    },
-    {
-      id: 2,
-      name: "Annie's shop",
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://api.dicebear.com/7.x/open-peeps/svg?seed=Samantha&face=awe,blank,calm,cheeky,concerned,concernedFear,contempt,cute,cyclops,driven,eatingHappy,explaining,eyesClosed,fear,hectic,lovingGrin1,lovingGrin2,monster,old,rage,serious,smile,smileBig,smileLOL,smileTeethGap,solemn,suspicious,tired,veryAngry"
-    },
-    {
-      id: 3,
-      name: "Annie's shop",
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://api.dicebear.com/7.x/open-peeps/svg?seed=Rascal"
-    },
-    {
-      id: 4,
-      name: "Annie's shop",
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://api.dicebear.com/7.x/open-peeps/svg?seed=Milo"
-    },
-  ];
+    async function fetchStores() {
+      try {
+        const storesRef = collection(db, "stores");
+        const q = query(
+          storesRef,
+          limit(5)
+        );
+        const querySnap = await getDocs(q);
+        const stores = [];
+        querySnap.forEach((doc) => {
+          return stores.push({
+            id: doc.id,
+            name: doc.data().name,
+            content: doc.data().content,
+            imgUrl: doc.data().imgUrl,
+            timestamp: doc.data().timestamp
+          });
+        });
+
+        setStores(stores);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchCategories();
+    fetchStores();
+  }, []);
 
   const products = [
     {

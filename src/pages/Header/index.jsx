@@ -87,7 +87,7 @@ const Header = () => {
     <header className="bg-white relative">
       <div className="relative">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-3 py-5" aria-label="Global">
-          <div className="flex lg:flex-1">
+          <div className="flex lg:flex-1 cursor-pointer">
             <a onClick={() => navigate("/")} className="-m-1.5 p-1.5 flex items-center">
               <img className="h-8 w-auto" src="https://img.icons8.com/windows/96/chair.png" alt="logo" />
               <span className="text-xl font-semibold leading-6 text-gray-900">好好訂位</span>
