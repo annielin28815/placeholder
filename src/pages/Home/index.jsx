@@ -12,6 +12,7 @@ import { doc, serverTimestamp, setDoc, getDoc, collection, getDocs, limit, order
 const Home = () => {
   const [categories, setCategories] = useState([]);
   const [stores, setStores] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -53,8 +54,32 @@ const Home = () => {
             timestamp: doc.data().timestamp
           });
         });
-
         setStores(stores);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function fetchProducts() {
+      try {
+        const productsRef = collection(db, "products");
+        const q = query(
+          productsRef,
+          limit(4)
+        );
+        const querySnap = await getDocs(q);
+        const products = [];
+        querySnap.forEach((doc) => {
+          return products.push({
+            id: doc.id,
+            name: doc.data().name,
+            content: doc.data().content,
+            imgUrl: doc.data().imgUrl,
+            price: doc.data().price,
+            timestamp: doc.data().timestamp
+          });
+        });
+        setProducts(products);
       } catch (error) {
         console.log(error);
       }
@@ -62,42 +87,8 @@ const Home = () => {
 
     fetchCategories();
     fetchStores();
+    fetchProducts();
   }, []);
-
-  const products = [
-    {
-      id: 1,
-      name: "手作金工體驗-做一個自己的手環",
-      tags: ["handmade", "beauty"],
-      price: 200,
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://lh4.googleusercontent.com/DPBQfndvEskF1goBB0GqMmPyaeekNOE21QC5Xw9G_haLaxOKaxhWZJJVbPmo1ailQtuKt00OCN6OJk2i7VnQ5T5O4XNwr6yUJRPHAghf3WYV89rFY8ctxwr4yBGHFbZXlRuylQEm"
-    },
-    {
-      id: 2,
-      name: "韓式多層次睫毛嫁接",
-      tags: ["handmade", "beauty"],
-      price: 200,
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://www.angel-eyelash.tw/assets/images/eyelash-extensions-suitable.jpg"
-    },
-    {
-      id: 3,
-      name: "手作蛋糕體驗-自己做蛋糕",
-      tags: ["handmade", "beauty"],
-      price: 200,
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://lh4.googleusercontent.com/DPBQfndvEskF1goBB0GqMmPyaeekNOE21QC5Xw9G_haLaxOKaxhWZJJVbPmo1ailQtuKt00OCN6OJk2i7VnQ5T5O4XNwr6yUJRPHAghf3WYV89rFY8ctxwr4yBGHFbZXlRuylQEm"
-    },
-    {
-      id: 4,
-      name: "指甲彩繪-讓指甲穿新衣",
-      tags: ["handmade", "beauty"],
-      price: 200,
-      content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-      imgUrl: "https://tuanuu.tw/wp-content/uploads/20171011223452_99.jpg"
-    },
-  ];
 
   return (
     <div className="container mx-auto">
