@@ -1,7 +1,5 @@
-
-.card img {
+/* .card img {
   width: 100%;
-  object-fit: fill;
 }
 .card:hover {
 	transform: translateY(-10px);
@@ -19,4 +17,4 @@
 	color: #7D5D43;
 	font-weight: 700;
 	transition: all .2s linear;
-}
+} */

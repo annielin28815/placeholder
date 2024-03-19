@@ -36,7 +36,7 @@ const Header = () => {
       } else {
         setIsLogin(false);
         setCurrentUserData({role: 0});
-        setPageState("Sign out")
+        setPageState("Sign out");
       }
     });
   }, [auth]);

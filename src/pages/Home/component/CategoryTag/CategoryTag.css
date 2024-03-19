@@ -8,7 +8,8 @@
 }
 .category-card-group .tag:hover {
 	transition: all .2s linear;
-  font-weight: bold;
+  color: #FFF;
+  background: #ad7a50;
 }
 .category-card-group .card-content {
   width: calc(100% - 58px);

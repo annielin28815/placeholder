@@ -13,7 +13,7 @@ import FormSelect from '../../components/FormSelect';
 
 import { getAuth, updateProfile, RecaptchaVerifier, signInWithPhoneNumber  } from "firebase/auth";
 import { db } from '../../firebase';
-import { doc, serverTimestamp, setDoc, getDocs, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc, getDoc, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
 
 const Profile = () => {
   const auth = getAuth();
@@ -34,6 +34,22 @@ const Profile = () => {
   const [showOTPInput, setShowOTPInput] = useState(false);
   const [confirmObj, setConfirmObj] = useState({});
   const [isCorrectOTP, setIsCorrectOTP] = useState(false);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const docRef = doc(db, "users", auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        // setListing(docSnap.data());
+        setFormData({ ...docSnap.data() });
+        // setLoading(false);
+      } else {
+        navigate("/");
+        showNotify("error", "查無此帳號");
+      }
+    }
+    fetchUser();
+  }, []);
   
   const showNotify = (status, content) => {
     const notifySetting = {
@@ -75,8 +91,8 @@ const Profile = () => {
     try {
       showNotify("success", "嗨！人類");
       setShowOTPInput(true);
-      setConfirmObj(response);
       const response = await setUpRecaptha(countryPhone);
+      setConfirmObj(response);
       console.log("setUpRecaptha response..... =>", response);
       setShowOTPInput(false);
     } catch (err) {
@@ -159,7 +175,7 @@ const Profile = () => {
         await updateProfile(auth.currentUser, {
           displayName: formData.name
         });
-        await setDoc(docRef, {
+        await updateDoc(docRef, {
           role: 1 || null,
           displayName: formData.name || null,
           address: formData.address || null,
@@ -170,82 +186,89 @@ const Profile = () => {
       }
       showNotify("success", "更新成功");
     } catch (error) {
+      console.log(error);
       showNotify("error", "更新失敗");
     }
   };
 
-  console.log(showErrorPhone);
+  console.table(formData)
+
   return (
     <div>
       <PageTitle text="資料維護" />
-      <div className="max-w-md mx-auto">
-        <form onSubmit={onSubmit}>
-          <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
-            <div className="col-span-12">
-              <FormInput text="Email" type="email" id="email" defaultValue={formData.email} labelText="信箱" readOnly />
-            </div>
-            <div className="col-span-12">
-              <FormInput text="Name" type="text" id="name" labelText="店家名稱" onChange={onChange} required  />
-            </div>
-            <div className="col-span-12">
-              <FormInput text="Address" type="text" id="address" labelText="店家地址" onChange={onChange} required  />
-            </div>
-            <div className="col-span-12">
-              <FormSelect text="Industry" id="industry" labelText="店家產業別" onChange={onChange} required  />
-            </div>
-            <div className="col-span-12">
-              <FormTextarea text="Introduction" type="text" id="introduction" labelText="店家介紹" onChange={onChange} required  />
-            </div>
-            <div className="col-span-12">
-              <FormInput text="聯絡電話" type="number" id="phone" labelText="聯絡電話(不可變更)" onChange={onChange} required  />
-            </div>
-            {showErrorPhone === true &&
-              <div className="col-span-12">{errorPhoneMessage}</div>
-            }
-            {showOTPGenerateArea === true &&
+      {formData !== {} &&
+        <div className="max-w-md mx-auto">
+          <form
+            onSubmit={onSubmit}
+          >
+            <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
               <div className="col-span-12">
-                <div className="grid grid-cols-12 gap-x-6 gap-y-2">
-                  <div className="col-span-5">
-                    <a onClick={getRobot} style={{lineHeight: '40px', color: '#3766d3'}}>開始驗證</a>
-                  </div>
-                  <div className="col-span-12">
-                    <div id="recaptcha-container" />
+                <FormInput text="Email" type="email" id="email" defaultValue={formData.email} labelText="信箱" readOnly />
+              </div>
+              <div className="col-span-12">
+                <FormInput text="Name" type="text" id="name" defaultValue={formData.displayName} labelText="店家名稱" onChange={onChange} required  />
+              </div>
+              <div className="col-span-12">
+                <FormInput text="Address" type="text" id="address" defaultValue={formData.address} labelText="店家地址" onChange={onChange} required  />
+              </div>
+              <div className="col-span-12">
+                <FormSelect text="Industry" id="industry" defaultValue={formData.industry} labelText="店家產業別" onChange={onChange} required  />
+              </div>
+              <div className="col-span-12">
+                <FormTextarea text="Introduction" type="text" id="introduction" defaultValue={formData.introduction} labelText="店家介紹" onChange={onChange} required  />
+              </div>
+              <div className="col-span-12">
+                <FormInput text="聯絡電話" type="number" id="phone" defaultValue={formData.phone} labelText="聯絡電話(不可變更)" onChange={onChange} required  />
+              </div>
+              {showErrorPhone === true &&
+                <div className="col-span-12">{errorPhoneMessage}</div>
+              }
+              {showOTPGenerateArea === true &&
+                <div className="col-span-12">
+                  <div className="grid grid-cols-12 gap-x-6 gap-y-2">
+                    <div className="col-span-5">
+                      <a onClick={getRobot} style={{lineHeight: '40px', color: '#3766d3'}}>開始驗證</a>
+                    </div>
+                    <div className="col-span-12">
+                      <div id="recaptcha-container" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            }
-            {showOTPInput === true &&
-              <div className="col-span-12">
-                <div className="grid grid-cols-12 gap-x-6 gap-y-2">
-                  <div className="col-span-7">
-                    <FormInput text="簡訊驗證碼" type="number" id="OTPCode" labelText="簡訊驗證碼" onChange={onChange} required  />
-                  </div>
-                  <div className="col-span-5">
-                    {isCorrectOTP ?
-                      <span><CheckCircleIcon className="h-6 w-6 text-blue-600 font-bold mr-2" />已驗證完成</span>:
-                      <a onClick={verifyOtp} style={{lineHeight: '40px', color: '#3766d3'}}>確認驗證碼</a>
-                    }
+              }
+              {(showOTPInput === true && isCorrectOTP === true) &&
+                <div className="col-span-12">
+                  <div className="grid grid-cols-12 gap-x-6 gap-y-2">
+                    <div className="col-span-7">
+                      <FormInput text="簡訊驗證碼" type="number" id="OTPCode" labelText="簡訊驗證碼" onChange={onChange} required  />
+                    </div>
+                    <div className="col-span-5">
+                      {isCorrectOTP ?
+                        <span><CheckCircleIcon className="h-6 w-6 text-blue-600 font-bold mr-2" />已驗證完成</span>:
+                        <a onClick={verifyOtp} style={{lineHeight: '40px', color: '#3766d3'}}>確認驗證碼</a>
+                      }
+                    </div>
                   </div>
                 </div>
+              }
+              <div className="col-span-12">
+                <FormInput text="Instagram 網址" type="text" id="instagramUrl" labelText="Instagram 網址" onChange={onChange}  />
               </div>
-            }
-            <div className="col-span-12">
-              <FormInput text="Instagram 網址" type="text" id="instagramUrl" labelText="Instagram 網址" onChange={onChange}  />
+              <div className="col-span-12">
+                <FormInput text="Facebook 網址" type="text" id="facebookUrl" labelText="Facebook 網址" onChange={onChange}  />
+              </div>
+              <div className="col-span-12">
+                <FormInput text="Line ID" type="text" id="lineID" labelText="Line ID" onChange={onChange}  />
+              </div>
+              
+              <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
+                <FormButton type="button" status="cancel" onClickEvent={() => navigate("/")} text="取消" />
+                <FormButton type="submit" status={isFinished ? "normal" : "disabled"} disabled={isFinished ? false : true} onClickEvent={() => {}} text="更新" />
+              </div>
             </div>
-            <div className="col-span-12">
-              <FormInput text="Facebook 網址" type="text" id="facebookUrl" labelText="Facebook 網址" onChange={onChange}  />
-            </div>
-            <div className="col-span-12">
-              <FormInput text="Line ID" type="text" id="lineID" labelText="Line ID" onChange={onChange}  />
-            </div>
-            
-            <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
-              <FormButton type="submit" status={isFinished ? "normal" : "disabled"} disabled={isFinished ? false : true} onClickEvent={() => {}} text="更新" />
-            </div>
-          </div>
-        </form>
-        <ToastContainer />
-      </div>
+          </form>
+          <ToastContainer />
+        </div>
+      }
     </div>
   );
 };

@@ -63,7 +63,7 @@ const ProductDetail = () => {
       } else {
         setIsLogin(false);
         setCurrentUserData({role: 0});
-        setPageState("Sign out")
+        setPageState("Sign out");
       }
     });
   }, [auth]);
@@ -151,7 +151,8 @@ const ProductDetail = () => {
         </div>
       }
 
-      {(currentUserData.role === 0) &&
+      {/* {(currentUserData.role === 0) &&
+      } */}
         <div className="mb-3">
           <SectionTitle text="手作 6 吋提拉米蘇蛋糕體驗" />
           <div className="w-full">
@@ -196,7 +197,6 @@ const ProductDetail = () => {
             </button>
           </div>
         </div>
-      }
     </div>
   );
 };

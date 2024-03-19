@@ -102,7 +102,7 @@ const Home = () => {
           })}
         </ul>
       </div>
-      <SectionTitle text="最新加入店家" hasAll={false} />
+      <SectionTitle text="最新加入店家" link={true} hasAll={true} />
       <div className="overflow-x-scroll overflow-y-hidden">
         <ul className="store-card-group my-5 flex flex-wrap content-baseline" >
           {stores.length > 0 && stores.map((item) => {
