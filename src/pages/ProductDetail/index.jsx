@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import './ProductDetail.css';
 
@@ -31,6 +31,7 @@ const ProductDetail = () => {
   const [randomImgUrl, setRandomImgUrl] = useState("https://unsplash.com/photos/kPxsqUGneXQ");
   const [res, setRes] = useState([]);
   const [randomChecked, setRandomChecked] = useState(false);
+  const [urlInputDisplay, setUrlInputDisplay] = useState(true);
 
   const tags = [
     "宜送禮", "動手做"
@@ -42,7 +43,6 @@ const ProductDetail = () => {
     );
     const imgData = await data.json();
     const result = imgData.results;
-    // console.log(result);
     setRes(result);
     const shortData = {};
     result.map((item) => {
@@ -51,20 +51,19 @@ const ProductDetail = () => {
       shortData.alt = item.alt_description;
     });
     setRandomImg(shortData);
-    setRandomImgUrl(shortData.url)
+    setFormData((prevState) => ({
+      ...prevState,
+      imgUrl: shortData.url
+    }));
   };
 
   const handleCheckRandom = (e) => {
+    setUrlInputDisplay(false);
     setRandomChecked(true);
     if(e.target.checked) {
       fetchRequest();
     }
   }
-
-  // useEffect(() => {
-  //   fetchRequest();
-  // }, []);
-
 
   useEffect(() => {
     setCurrentID(params.id);
@@ -98,7 +97,7 @@ const ProductDetail = () => {
       } else {
         setIsLogin(false);
         setCurrentUserData({role: 0});
-        setPageState("Sign out")
+        setPageState("Sign out");
       }
     });
   }, [auth]);
@@ -131,8 +130,9 @@ const ProductDetail = () => {
     }));
   };
 
-  const onSubmit = () => {
-
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log('current form data =>' , formData);
   }
 
 
@@ -144,23 +144,22 @@ const ProductDetail = () => {
           <form onSubmit={onSubmit}>
             <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
               <div className="col-span-12">
-                <FormInput text="Name" type="text" id="name" labelText="名稱" defaultValue="手作 6 吋提拉米蘇蛋糕體驗" onChange={onChange} required  />
+                <FormInput text="Name" type="text" id="name" labelText="名稱" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
-                <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" defaultValue="好吃的蛋糕不要再用買的，都自己做吧！我們會提供全部器材與材料，帶著一顆愉悅的心即可預約體驗唷！" onChange={onChange} required  />
+                <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
-                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" onChange={onChange} required  />
+                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" onChange={onChange} required={urlInputDisplay}  />
               </div>
               <div className="col-span-12">
                 <div className="flex items-center ml-1 mb-4">
                   <input id="checkToRandom" type="checkbox" checked={randomChecked} onChange={handleCheckRandom} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                   <label htmlFor="checkToRandom" className="ml-2 text-sm font-medium text-gray-900">使用隨機圖片</label>
                 </div>
-                {/* <ActionButton type="button" status="normal" disabled={false} userRole={3} onClickEvent={fetchRequest} text="隨機圖片" /> */}
               </div>
               <div className="col-span-12">
-                <FormInput text="Deposit" type="number" id="price" labelText="訂金(單位：新臺幣)" defaultValue="300" onChange={onChange} required  />
+                <FormInput text="Deposit" type="number" id="price" labelText="訂金(單位：新臺幣)" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
                 <FormInput text="url" type="url" id="otherUrl" labelText="相關作品集(網址)" defaultValue="" onChange={onChange}  />

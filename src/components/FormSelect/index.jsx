@@ -20,9 +20,9 @@ const FormSelect = (props) => {
           className="border-2 border-slate-300 h-10 px-3 py-2 block w-full rounded-md text-left focus:outline-none focus:border-slate-600"
         >
           <option value="">{'請選擇 ' + props.labelText}</option>
-          <option value="美容業">美容業</option>
-          <option value="資訊業">資訊業</option>
-          <option value="藝術業">藝術業</option>
+          <option value="beauty" checked={props.defaultValue === 'beauty'}>美容業</option>
+          <option value="tech" checked={props.defaultValue === 'tech'}>資訊業</option>
+          <option value="art" checked={props.defaultValue === 'art'}>藝術業</option>
         </select>
       </div>
     );
