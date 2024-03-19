@@ -9,6 +9,7 @@ import FormButton from '../../components/FormButton';
 import FormTextarea from '../../components/FormTextarea';
 import SectionTitle from './components/SectionTitle';
 import EnableTable from './components/EnableTable';
+import ActionButton from '../../components/ActionButton';
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -26,10 +27,44 @@ const ProductDetail = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentUserData, setCurrentUserData] = useState({role: 0});
+  const [randomImg, setRandomImg] = useState("product");
+  const [randomImgUrl, setRandomImgUrl] = useState("https://unsplash.com/photos/kPxsqUGneXQ");
+  const [res, setRes] = useState([]);
+  const [randomChecked, setRandomChecked] = useState(false);
 
   const tags = [
     "宜送禮", "動手做"
-  ]
+  ];
+
+  const fetchRequest = async () => {
+    const data = await fetch(
+      `https://api.unsplash.com/search/photos?page=1&query=${randomImg}&client_id=1mb8H_0vDG2sdoA-c0uboVSR9V7tHpWEGVC_82zi31U&per_page=1`
+    );
+    const imgData = await data.json();
+    const result = imgData.results;
+    // console.log(result);
+    setRes(result);
+    const shortData = {};
+    result.map((item) => {
+      shortData.id = item.id;
+      shortData.url = item.urls.small;
+      shortData.alt = item.alt_description;
+    });
+    setRandomImg(shortData);
+    setRandomImgUrl(shortData.url)
+  };
+
+  const handleCheckRandom = (e) => {
+    setRandomChecked(true);
+    if(e.target.checked) {
+      fetchRequest();
+    }
+  }
+
+  // useEffect(() => {
+  //   fetchRequest();
+  // }, []);
+
 
   useEffect(() => {
     setCurrentID(params.id);
@@ -104,7 +139,7 @@ const ProductDetail = () => {
   return (
     <div>
       <PageTitle text={currentTitle} />
-      {(currentUserData.role === 1 && pageState === "update") &&
+      {/* {(currentUserData.role === 1 && pageState === "update") && */}
         <div>
           <form onSubmit={onSubmit}>
             <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
@@ -115,7 +150,14 @@ const ProductDetail = () => {
                 <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" defaultValue="好吃的蛋糕不要再用買的，都自己做吧！我們會提供全部器材與材料，帶著一顆愉悅的心即可預約體驗唷！" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
-                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" defaultValue="https://unsplash.com/photos/kPxsqUGneXQ" onChange={onChange} required  />
+                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" onChange={onChange} required  />
+              </div>
+              <div className="col-span-12">
+                <div className="flex items-center ml-1 mb-4">
+                  <input id="checkToRandom" type="checkbox" checked={randomChecked} onChange={handleCheckRandom} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                  <label htmlFor="checkToRandom" className="ml-2 text-sm font-medium text-gray-900">使用隨機圖片</label>
+                </div>
+                {/* <ActionButton type="button" status="normal" disabled={false} userRole={3} onClickEvent={fetchRequest} text="隨機圖片" /> */}
               </div>
               <div className="col-span-12">
                 <FormInput text="Deposit" type="number" id="price" labelText="訂金(單位：新臺幣)" defaultValue="300" onChange={onChange} required  />
@@ -135,7 +177,7 @@ const ProductDetail = () => {
                       <label htmlFor="checkbox-2" className="ml-2 text-sm font-medium text-gray-900">變文青</label>
                   </div>
                   <div className="flex items-center ml-1 mb-4">
-                      <input checked id="checkbox-3" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                      <input id="checkbox-3" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                       <label htmlFor="checkbox-3" className="ml-2 text-sm font-medium text-gray-900">宜送禮</label>
                   </div>
                 </fieldset>
@@ -149,9 +191,9 @@ const ProductDetail = () => {
           </form>
           <ToastContainer />
         </div>
-      }
+      {/* } */}
 
-      {(currentUserData.role === 0) &&
+      {/* {(currentUserData.role === 0) &&
         <div className="mb-3">
           <SectionTitle text="手作 6 吋提拉米蘇蛋糕體驗" />
           <div className="w-full">
@@ -196,7 +238,7 @@ const ProductDetail = () => {
             </button>
           </div>
         </div>
-      }
+      } */}
     </div>
   );
 };
