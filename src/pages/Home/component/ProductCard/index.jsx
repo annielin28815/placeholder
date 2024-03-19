@@ -1,12 +1,14 @@
 import React from 'react';
 import './ProductCard.css';
+import { useState, useEffect } from 'react';
 
 const ProductCard = (props) => {
+
 
     return (
       <li className="card box-border grow-0 shrink-0 p-0 rounded-2xl bg-gray-100 overflow-hidden cursor-pointer">
         <div className="rounded-2xl">
-          <img className="w-full h-full object-fill rounded-2xl overflow-hidde" src={props.mainImg} />
+          <img className="w-full h-full object-fill rounded-2xl overflow-hidden" src={props.mainImg} />
         </div>
         <div className="card-content p-2">
           <div className="p-0 flex items-center gap-1 whitespace-nowrap flex-wrap">

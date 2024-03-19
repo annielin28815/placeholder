@@ -23,35 +23,37 @@ function App() {
           <div className="border-x border-solid border-gray-900 my-0">
             <Header className="fixed top-0 z-20" />
           </div>
-          <div className="main-page border-x border-solid border-gray-900 my-0 overflow-y-scroll" style={{height: 'calc(100vh - 80px)'}}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
+          <div className="main-page border-x border-solid border-gray-900 my-0 ">
+            <div className="overflow-y-scroll" style={{height: 'calc(100vh - 110px)'}}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
 
-              <Route path="/studio/profile" element={<PrivateRoute />}>
-                <Route path="/studio/profile" element={<Profile />} />
-              </Route>
-              
-              <Route path="/reserveations" element={<ReservationList />} />
+                <Route path="/studio/profile" element={<PrivateRoute />}>
+                  <Route path="/studio/profile" element={<Profile />} />
+                </Route>
+                
+                <Route path="/reserveations" element={<ReservationList />} />
 
-              <Route path="/howtouse" element={<HowToUse />} />
-              
-              <Route path="/studio/products" element={<ProductList />} />
-              <Route path="/studio/products/create" element={<ProductDetail />} />
-              <Route path="/studio/products/update/:id" element={<ProductDetail />} />
-              
-              <Route path="/customer/products" element={<ProductList />} />
-              <Route path="/customer/products/:id" element={<ProductDetail />} />
+                <Route path="/howtouse" element={<HowToUse />} />
+                
+                <Route path="/studio/products" element={<ProductList />} />
+                <Route path="/studio/products/create" element={<ProductDetail />} />
+                <Route path="/studio/products/update/:id" element={<ProductDetail />} />
+                
+                <Route path="/customer/products" element={<ProductList />} />
+                <Route path="/customer/products/:id" element={<ProductDetail />} />
 
-              <Route path="/studio/reserveations" element={<ProductList />} />
-              <Route path="/studio/reserveations/create" element={<ProductDetail />} />
-              
-              <Route path="/customer/reserveations" element={<ProductList />} />
-              <Route path="/customer/reserveations/create" element={<ProductDetail />} />
+                <Route path="/studio/reserveations" element={<ProductList />} />
+                <Route path="/studio/reserveations/create" element={<ProductDetail />} />
+                
+                <Route path="/customer/reserveations" element={<ProductList />} />
+                <Route path="/customer/reserveations/create" element={<ProductDetail />} />
 
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </div>
             <Footer />
           </div>
         </div>

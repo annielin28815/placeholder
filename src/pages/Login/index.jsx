@@ -162,11 +162,11 @@ const Login = () => {
             </div>
 
             <div className="col-span-12">
-              <FormInput text="Email" type="email" id="email" labelText="信箱" onChange={onChange} />
+              <FormInput text="Email" type="email" id="email" labelText="信箱" onChange={onChange} required />
             </div>
 
             <div className="col-span-12">
-              <FormInput text="Password" type="password" id="password" labelText="密碼" onChange={onChange} />
+              <FormInput text="Password" type="password" id="password" labelText="密碼" onChange={onChange} required />
             </div>
 
             <div className="col-span-12 mt-2 flex items-center justify-center gap-x-2">
