@@ -26,7 +26,7 @@ const Login = () => {
   const showNotify = (status, content) => {
     const notifySetting = {
       position: "top-center",
-      autoClose: false,
+      autoClose: true,
       hideProgressBar: false,
       newestOnTop: false,
       closeOnClick: true,

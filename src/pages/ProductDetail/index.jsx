@@ -150,7 +150,7 @@ const ProductDetail = () => {
                 <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
-                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" onChange={onChange} required={urlInputDisplay}  />
+                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" onChange={onChange} required={urlInputDisplay} disabled={urlInputDisplay}  />
               </div>
               <div className="col-span-12">
                 <div className="flex items-center ml-1 mb-4">

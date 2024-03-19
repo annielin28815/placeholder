@@ -81,36 +81,43 @@ const Profile = () => {
       {}
     );
     recaptchaVerifier.render();
-    console.log("recaptchaVerifier =>", recaptchaVerifier);
-    return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+    // console.log("recaptchaVerifier =>", recaptchaVerifier);
+    // return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
   };
 
   const getRobot = async(e) => {
     e.preventDefault();
     let realPhone = formData.phone.substring(1);
-    let countryPhone = "+886" + realPhone;
+    // let countryPhone = "+886" + realPhone;
 
-    try {
-      showNotify("success", "嗨！人類");
-      setShowOTPInput(true);
-      const response = await setUpRecaptha(countryPhone);
-      setConfirmObj(response);
-      console.log("setUpRecaptha response..... =>", response);
-    } catch (err) {
-      console.log(err);
-      showNotify("error", "目前無法驗證");
-    }
+    showNotify("success", "電話驗證完成");
+    setShowOTPInput(false);
+    setShowOTPGenerateArea(false);
+
+    // try {
+    //   showNotify("success", "嗨!人類~");
+    //   setShowOTPInput(true);
+    //   const response = await setUpRecaptha(countryPhone);
+    //   console.log(response);
+    //   setConfirmObj(response);
+    // } catch (err) {
+    //   console.log(err);
+    //   showNotify("error", "目前無法驗證");
+    // }
   };
 
   const verifyOtp = async (e) => {
-    e.preventDeault();
+    e.preventDefault();
     setShowOTPInput(false);
 
     if (formData.OTPCode === "" || formData.OTPCode === null) return;
     try {
       await confirmObj.confirm(formData.OTPCode);
+      console.log(confirmObj);
+      // setIsCorrectOTP(true);
+      setIsCorrectOTP(false);
+      setShowOTPGenerateArea(false);
       showNotify("success", "太棒了！已完成手機認證");
-      setIsCorrectOTP(true)
     } catch (err) {
       setIsCorrectOTP(false);
       showNotify("error", err.message);
@@ -170,28 +177,29 @@ const Profile = () => {
     try {
       const auth = getAuth();
       const docRef = doc(db, "users", auth.currentUser.uid);
+      console.log('auth =>', auth);
+      console.log('formData.name =>', formData.name);
+      
 
-      if (auth.currentUser.displayName !== formData.name) {
-        await updateProfile(auth.currentUser, {
-          displayName: formData.name
-        });
-        await updateDoc(docRef, {
-          role: 1 || null,
-          displayName: formData.name || null,
-          address: formData.address || null,
-          industry: "beauty" || null,
-          introduction: formData.introduction || null,
-          timestamp: serverTimestamp() || null,
-        });
-      }
-      showNotify("success", "更新成功");
+      // if (auth.currentUser.displayName !== formData.name) {
+      //   await updateProfile(auth.currentUser, {
+      //     displayName: formData.name
+      //   });
+      //   await updateDoc(docRef, {
+      //     role: 1 || null,
+      //     displayName: formData.name || null,
+      //     address: formData.address || null,
+      //     industry: "beauty" || null,
+      //     introduction: formData.introduction || null,
+      //     timestamp: serverTimestamp() || null,
+      //   });
+      // }
+      // showNotify("success", "更新成功");
     } catch (error) {
       console.log(error);
       showNotify("error", "更新失敗");
     }
   };
-
-  console.table(formData.industry)
 
   return (
     <div>
@@ -233,13 +241,13 @@ const Profile = () => {
                   </div>
                 </div>
               }
-              {(showOTPInput === true && isCorrectOTP === true) &&
+              {(showOTPInput === true) &&
                 <div className="col-span-12">
                   <div className="grid grid-cols-12 gap-x-6 gap-y-2">
                     <div className="col-span-7">
                       <FormInput text="簡訊驗證碼" type="number" id="OTPCode" labelText="簡訊驗證碼" onChange={onChange} required  />
                     </div>
-                    <div className="col-span-5">
+                    <div className="col-span-5 flex items-center justify-center">
                       {isCorrectOTP ?
                         <span><CheckCircleIcon className="h-6 w-6 text-blue-600 font-bold mr-2" />已驗證完成</span>:
                         <a onClick={verifyOtp} style={{lineHeight: '40px', color: '#3766d3'}}>確認驗證碼</a>

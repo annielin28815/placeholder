@@ -26,7 +26,7 @@ const SignUp = () => {
   const showNotify = (status, content) => {
     const notifySetting = {
       position: "top-center",
-      autoClose: false,
+      autoClose: true,
       hideProgressBar: false,
       newestOnTop: false,
       closeOnClick: true,
@@ -83,9 +83,15 @@ const SignUp = () => {
       formDataCopy.timestamp = serverTimestamp();
       await setDoc(doc(db, "users", user.uid), formDataCopy);
       showNotify("success", "註冊成功");
+      navigate("/studio/profile");
     } catch (error) {
-      console.log("error =>", error);
-      showNotify("error", "註冊失敗");
+      if(error.message === "Firebase: Error (auth/email-already-in-use).") {
+        showNotify("error", "此信箱已註冊過");
+      } else if(error.message === "Firebase: Error (auth/missing-password).") {
+        showNotify("error", "請填寫密碼");
+      } else {
+        showNotify("error", "註冊失敗");
+      }
     }
   };
 
