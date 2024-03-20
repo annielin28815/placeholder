@@ -113,7 +113,6 @@ const Profile = () => {
     if (formData.OTPCode === "" || formData.OTPCode === null) return;
     try {
       await confirmObj.confirm(formData.OTPCode);
-      console.log(confirmObj);
       // setIsCorrectOTP(true);
       setIsCorrectOTP(false);
       setShowOTPGenerateArea(false);
@@ -177,24 +176,26 @@ const Profile = () => {
     try {
       const auth = getAuth();
       const docRef = doc(db, "users", auth.currentUser.uid);
-      console.log('auth =>', auth);
-      console.log('formData.name =>', formData.name);
+      console.log('auth =>', auth.currentUser);
+      console.log('formData =>', formData);
+      // console.log('formData.name =>', formData.name);
       
 
-      // if (auth.currentUser.displayName !== formData.name) {
-      //   await updateProfile(auth.currentUser, {
-      //     displayName: formData.name
-      //   });
-      //   await updateDoc(docRef, {
-      //     role: 1 || null,
-      //     displayName: formData.name || null,
-      //     address: formData.address || null,
-      //     industry: "beauty" || null,
-      //     introduction: formData.introduction || null,
-      //     timestamp: serverTimestamp() || null,
-      //   });
-      // }
-      // showNotify("success", "更新成功");
+      if (auth.currentUser.displayName !== formData.name) {
+        await updateProfile(auth.currentUser, {
+          displayName: formData.name
+        });
+        await updateDoc(docRef, {
+          role: formData.role || null,
+          displayName: formData.displayName || null,
+          address: formData.address || null,
+          industry: formData.industry || null,
+          introduction: formData.introduction || null,
+          phone: formData.phone || null,
+          timestamp: serverTimestamp() || null,
+        });
+      }
+      showNotify("success", "更新成功");
     } catch (error) {
       console.log(error);
       showNotify("error", "更新失敗");

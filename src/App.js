@@ -34,7 +34,7 @@ function App() {
                   <Route path="/studio/profile" element={<Profile />} />
                 </Route>
                 
-                <Route path="/reserveations" element={<ReservationList />} />
+                <Route path="/reservations" element={<ReservationList />} />
 
                 <Route path="/howtouse" element={<HowToUse />} />
                 
@@ -45,11 +45,11 @@ function App() {
                 <Route path="/customer/products" element={<ProductList />} />
                 <Route path="/customer/products/:id" element={<ProductDetail />} />
 
-                <Route path="/studio/reserveations" element={<ProductList />} />
-                <Route path="/studio/reserveations/create" element={<ProductDetail />} />
+                <Route path="/studio/reservations" element={<ProductList />} />
+                <Route path="/studio/reservations/create" element={<ProductDetail />} />
                 
-                <Route path="/customer/reserveations" element={<ProductList />} />
-                <Route path="/customer/reserveations/create" element={<ProductDetail />} />
+                <Route path="/customer/reservations" element={<ProductList />} />
+                <Route path="/customer/reservations/create" element={<ProductDetail />} />
 
                 <Route path="*" element={<PageNotFound />} />
               </Routes>

@@ -1,6 +1,5 @@
 import React from 'react';
 import './ProductCard.css';
-import { useState, useEffect } from 'react';
 
 const ProductCard = (props) => {
 

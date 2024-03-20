@@ -76,6 +76,7 @@ const Home = () => {
             content: doc.data().content,
             imgUrl: doc.data().imgUrl,
             price: doc.data().price,
+            tags: doc.data().tags,
             timestamp: doc.data().timestamp
           });
         });
