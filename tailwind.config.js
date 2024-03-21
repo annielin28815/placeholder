@@ -14,6 +14,7 @@ module.exports = {
     extend: {
       colors: {
         'light-apricot': '#f5f4ef',
+        'white' : '#FCFCFC',
         'orange': {
           '100': '#fee8db',
           // '200': '#',

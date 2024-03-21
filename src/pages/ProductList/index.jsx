@@ -21,40 +21,7 @@ const ProductList = () => {
   const [hasProduct, setHasProduct] = useState(false);
   const [pageState, setPageState] = useState("Sign in");
   const [isLogin, setIsLogin] = useState(false);
-  // const products = [
-  //   {
-  //     id: 1,
-  //     name: "手作金工體驗-做一個自己的手環",
-  //     tags: ["宜送禮", "金工"],
-  //     price: 200,
-  //     content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-  //     imgUrl: "https://lh4.googleusercontent.com/DPBQfndvEskF1goBB0GqMmPyaeekNOE21QC5Xw9G_haLaxOKaxhWZJJVbPmo1ailQtuKt00OCN6OJk2i7VnQ5T5O4XNwr6yUJRPHAghf3WYV89rFY8ctxwr4yBGHFbZXlRuylQEm"
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "韓式多層次睫毛嫁接",
-  //     tags: ["變漂亮"],
-  //     price: 200,
-  //     content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-  //     imgUrl: "https://www.angel-eyelash.tw/assets/images/eyelash-extensions-suitable.jpg"
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "手作蛋糕體驗-自己做蛋糕",
-  //     tags: ["就是想吃", "儀式感"],
-  //     price: 200,
-  //     content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-  //     imgUrl: "https://lh3.googleusercontent.com/p/AF1QipNGdLnhyzXARarxR1YVAdJ1OOOY1gCYL8b9u_2N=s680-w680-h510"
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "指甲彩繪-讓指甲穿新衣",
-  //     tags: [ "變漂亮"],
-  //     price: 200,
-  //     content: "喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。喵喵喵喵喵喵喵喵喵喵喵喵，喵喵喵喵喵。",
-  //     imgUrl: "https://tuanuu.tw/wp-content/uploads/20171011223452_99.jpg"
-  //   },
-  // ];
+
   useEffect(() => {
     async function fetchProducts() {
       try {
@@ -115,7 +82,6 @@ const ProductList = () => {
     return (
       <div>
         <PageTitle text="服務項目列表頁" />
-        {console.log(products)}
 
         {(products.length > 0 && currentUserData.role === 0) &&
           <ul className="product-card-group my-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4" >
@@ -125,6 +91,10 @@ const ProductList = () => {
               )
             })}
           </ul>
+        }
+
+        {currentUserData.role === 1 &&
+          products.length > 0 ? <StudioTable data={products} /> : <Empty />
         }
       </div>
     );

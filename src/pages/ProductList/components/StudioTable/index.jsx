@@ -18,7 +18,20 @@ const StudioTable = (props) => {
 								</tr>
 						</thead>
 						<tbody>
-								<tr className="bg-white border-b bg-gray-300 border-gray-200 hover:bg-orange-100">
+							{props.data.length > 0 && props.data.map((item) => {
+								return (
+									<tr className="bg-white border-b bg-gray-300 border-gray-200 hover:bg-orange-100" key={item.id}>
+										<th scope="row" className="p-2 font-base text-gray-900 whitespace-nowrap">
+												{item.name}
+										</th>
+										<td className="p-2 text-center flex justify-between items-center">
+												<a href="#" className="font-base text-gray-600 hover:underline"><PencilSquareIcon className="h-6 w-6" /></a>
+												<a href="#" className="font-base text-gray-600 hover:underline"><TrashIcon className="h-6 w-6" /></a>
+										</td>
+									</tr>
+								)
+							})}
+								{/* <tr className="bg-white border-b bg-gray-300 border-gray-200 hover:bg-orange-100">
 										<th scope="row" className="p-2 font-base text-gray-900 whitespace-nowrap">
 												手作 6 吋提拉米蘇蛋糕體驗
 										</th>
@@ -44,7 +57,7 @@ const StudioTable = (props) => {
 												<a href="#" className="font-base text-gray-600 hover:underline"><PencilSquareIcon className="h-6 w-6" /></a>
 												<a href="#" className="font-base text-gray-600 hover:underline"><TrashIcon className="h-6 w-6" /></a>
 										</td>
-								</tr>
+								</tr> */}
 						</tbody>
 				</table>
 			</div>

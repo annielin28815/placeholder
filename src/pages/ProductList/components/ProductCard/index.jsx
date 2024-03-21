@@ -7,7 +7,7 @@ const ProductCard = (props) => {
   const navigate = useNavigate();
 
   return (
-    <li className="card box-border grow-0 shrink-0 p-0 rounded-2xl bg-gray-100 overflow-hidden cursor-pointer">
+    <li className="card box-border grow-0 shrink-0 p-0 rounded-2xl bg-gray-100 overflow-hidden cursor-pointer" key={props.key}>
       <div className="rounded-2xl" style={{height: '160px'}}>
         <img className="w-full h-full object-fill rounded-2xl overflow-hidden" src={props.mainImg} />
       </div>
