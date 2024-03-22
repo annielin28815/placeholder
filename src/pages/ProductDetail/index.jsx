@@ -14,13 +14,22 @@ import ActionButton from '../../components/ActionButton';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { db } from '../../firebase';
+import { doc, getDoc} from "firebase/firestore";
 
 const ProductDetail = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
-  const [formData, setFormData] = useState({});
+  const [product, setProduct] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    price: 0,
+    tags: [],
+    isRandomImg: [],
+    imgUrl: ""
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [currentID, setCurrentID] = useState("");
   const [pageState, setPageState] = useState("create");
@@ -31,11 +40,47 @@ const ProductDetail = () => {
   const [randomImgUrl, setRandomImgUrl] = useState("https://unsplash.com/photos/kPxsqUGneXQ");
   const [res, setRes] = useState([]);
   const [randomChecked, setRandomChecked] = useState(false);
-  const [urlInputDisplay, setUrlInputDisplay] = useState(true);
+  const [isImgUrlRequired, setIsImgUrlRequired] = useState(false);
+  const {name, price, tags, isRandomImg, imgUrl} = formData;
 
-  const tags = [
-    "宜送禮", "動手做"
-  ];
+  const showNotify = (status, content) => {
+    const notifySetting = {
+      position: "top-center",
+      autoClose: true,
+      hideProgressBar: false,
+      newestOnTop: false,
+      closeOnClick: true,
+      rtl: false,
+      pauseOnFocusLoss: true,
+      draggable: true,
+      pauseOnHover: true,
+      theme: "light"
+    };
+
+    if(status === "success") {
+      toast.success(content, notifySetting);
+    } else if (status === "error") {
+      toast.error(content, notifySetting);
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    async function fetchingProduct() {
+      const docRef = doc(db, "products", params.id);
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists) {
+        setProduct(docSnap.data());
+        setFormData({...docSnap.data()});
+        console.log(docSnap.data());
+        setIsLoading(false);
+      }else {
+        navigate("/");
+        showNotify("error", "此服務項目可能已下架")
+      }
+    }
+    fetchingProduct();
+  }, []);
 
   const fetchRequest = async () => {
     const data = await fetch(
@@ -56,14 +101,6 @@ const ProductDetail = () => {
       imgUrl: shortData.url
     }));
   };
-
-  const handleCheckRandom = (e) => {
-    setUrlInputDisplay(false);
-    setRandomChecked(true);
-    if(e.target.checked) {
-      fetchRequest();
-    }
-  }
 
   useEffect(() => {
     setCurrentID(params.id);
@@ -102,30 +139,27 @@ const ProductDetail = () => {
     });
   }, [auth]);
 
-  const showNotify = (status, content) => {
-    const notifySetting = {
-      position: "top-center",
-      autoClose: true,
-      hideProgressBar: false,
-      newestOnTop: false,
-      closeOnClick: true,
-      rtl: false,
-      pauseOnFocusLoss: true,
-      draggable: true,
-      pauseOnHover: true,
-      theme: "light"
-    };
-
-    if(status === "success") {
-      toast.success(content, notifySetting);
-    } else if (status === "error") {
-      toast.error(content, notifySetting);
-    }
-  };
-
   const onChange = (e) => {
+    const newData = { ... formData };
+    if(e.target.id.includes('imgChoose')) {
+      if(e.target.value === '使用隨機圖片') {
+        setIsImgUrlRequired(false);
+        newData.isRandomImg = [
+          {name: '使用隨機圖片', checked: true},
+          {name: '自定義', checked: false}
+        ]
+      } else {
+        setIsImgUrlRequired(true);
+        newData.isRandomImg = [
+          {name: '使用隨機圖片', checked: false},
+          {name: '自定義', checked: true}
+        ]
+      }
+    }
+
     setFormData((prevState) => ({
       ...prevState,
+      ...newData,
       [e.target.id]: e.target.value,
     }));
   };
@@ -133,52 +167,93 @@ const ProductDetail = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log('current form data =>' , formData);
-  }
-
+  };
 
   return (
     <div>
       <PageTitle text={currentTitle} />
-      {/* {(currentUserData.role === 1 && pageState === "update") && */}
+      {(currentUserData.role === 1 && !isLoading ) &&
         <div>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} >
             <div className="bg-white grid grid-cols-12 gap-x-6 gap-y-2">
               <div className="col-span-12">
-                <FormInput text="Name" type="text" id="name" labelText="名稱" onChange={onChange} required  />
+                <FormInput text="Name" type="text" id="name" value={formData.name} labelText="名稱" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
-                <FormTextarea text="Introduction" type="text" id="introduction" labelText="介紹" onChange={onChange} required  />
+                <FormTextarea text="Introduction" type="text" id="introduction" value={formData.introduction} labelText="介紹" onChange={onChange} required  />
               </div>
-              <div className="col-span-12">
-                <FormInput text="MainImage" type="url" id="imgUrl" labelText="主要圖片(網址)" onChange={onChange} required={urlInputDisplay} disabled={urlInputDisplay}  />
-              </div>
-              <div className="col-span-12">
+              
+              {/* <div className="col-span-12">
                 <div className="flex items-center ml-1 mb-4">
-                  <input id="checkToRandom" type="checkbox" checked={randomChecked} onChange={handleCheckRandom} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                  <label htmlFor="checkToRandom" className="ml-2 text-sm font-medium text-gray-900">使用隨機圖片</label>
+                  <input id="isRandomImg" type="checkbox" checked={formData.isRandomImg} onChange={handleCheckRandom} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                  <label htmlFor="isRandomImg" className="ml-2 text-sm font-medium text-gray-900">隨機</label>
                 </div>
+              </div> */}
+
+              <div className="col-span-12">
+                <FormLabel labelText="主要圖片" required={true} />
+                <fieldset className="grid grid-cols-2 gap-1">
+                  {formData.isRandomImg.map((item, index) => {
+                    return (
+                      <div className="flex items-center ml-1 mb-4" key={index}>
+                        <input 
+                          name="isRandomImg" 
+                          type="radio" 
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
+                          id={'imgChoose-' + index} 
+                          value={item.name}
+                          checked={item.checked}
+                          required
+                          onChange={onChange}
+                        />
+                        <label 
+                          htmlFor={'imgChoose-' + index} 
+                          className="ml-2 text-sm font-medium text-gray-900"
+                        >
+                          {item.name}
+                        </label>
+                      </div>
+                    )
+                  })}
+                </fieldset>
+              </div>
+
+              {isImgUrlRequired &&
+                <div className="col-span-12">
+                  <FormInput text="MainImage" type="url" id="imgUrl" value={formData.imgUrl} labelText="自定義代表圖片(網址)" onChange={onChange} required={isImgUrlRequired}  />
+                </div>
+              }
+
+              <div className="col-span-12">
+                <FormInput text="Deposit" type="number" id="price" value={formData.price} labelText="訂金(單位：新臺幣)" onChange={onChange} required  />
               </div>
               <div className="col-span-12">
-                <FormInput text="Deposit" type="number" id="price" labelText="訂金(單位：新臺幣)" onChange={onChange} required  />
-              </div>
-              <div className="col-span-12">
-                <FormInput text="url" type="url" id="otherUrl" labelText="相關作品集(網址)" defaultValue="" onChange={onChange}  />
+                <FormInput text="url" type="url" id="otherUrl" value={formData.otherUrl} labelText="相關作品集(網址)" onChange={onChange}  />
               </div>
               <div className="col-span-12">
                 <FormLabel labelText="相關標籤(可複選)" required={false} />
                 <fieldset className="grid grid-cols-4 gap-3">
-                  <div className="flex items-center ml-1 mb-4">
-                      <input id="checkbox-1" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                      <label htmlFor="checkbox-1" className="ml-2 text-sm font-medium text-gray-900">變好看</label>
-                  </div>
-                  <div className="flex items-center ml-1 mb-4">
-                      <input id="checkbox-2" type="checkbox" value="art" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                      <label htmlFor="checkbox-2" className="ml-2 text-sm font-medium text-gray-900">變文青</label>
-                  </div>
-                  <div className="flex items-center ml-1 mb-4">
-                      <input id="checkbox-3" type="checkbox" value="beauty" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                      <label htmlFor="checkbox-3" className="ml-2 text-sm font-medium text-gray-900">宜送禮</label>
-                  </div>
+                  {formData.tags.map((item, index) => {
+                    return (
+                      <div className="flex items-center ml-1 mb-4" key={index}>
+                        <input 
+                          name="tags" 
+                          type="checkbox" 
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
+                          id={'tagsChoose-' + index} 
+                          value={item.name}
+                          checked={item.checked}
+                          onChange={onChange}
+                        />
+                        <label 
+                          htmlFor={'tagsChoose-' + index} 
+                          className="ml-2 text-sm font-medium text-gray-900"
+                        >
+                          {item.name}
+                        </label>
+                      </div>
+                    )
+                  })}
                 </fieldset>
               </div>
               
@@ -190,7 +265,7 @@ const ProductDetail = () => {
           </form>
           <ToastContainer />
         </div>
-      {/* } */}
+      }
 
       {/* {(currentUserData.role === 0) &&
         <div className="mb-3">

@@ -20,6 +20,7 @@ const FormTextarea = (props) => {
           placeholder={'請輸入 ' + props.labelText}
           title={'請輸入 ' + props.labelText}
           defaultValue={props.defaultValue}
+          value={props.value}
           className="border-2 border-slate-300 px-3 py-2 block w-full rounded-md text-left focus:outline-none focus:border-slate-600"
         />
       </div>

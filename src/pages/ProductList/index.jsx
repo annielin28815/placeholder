@@ -15,7 +15,7 @@ import { collection, getDocs, limit, query } from "firebase/firestore";
 const ProductList = () => {
   const auth = getAuth();
   const location = useLocation();
-
+  const [isLoading, setIsLoading] = useState(true);
   const [currentUserData, setCurrentUserData] = useState({role: 0});
   const [products, setProducts] = useState([]);
   const [hasProduct, setHasProduct] = useState(false);
@@ -31,9 +31,9 @@ const ProductList = () => {
           limit(4)
         );
         const querySnap = await getDocs(q);
-        const products = [];
+        const allProducts = [];
         querySnap.forEach((doc) => {
-          return products.push({
+          return allProducts.push({
             id: doc.id,
             name: doc.data().name,
             content: doc.data().content,
@@ -43,7 +43,8 @@ const ProductList = () => {
             timestamp: doc.data().timestamp
           });
         });
-        setProducts(products);
+        setProducts(allProducts);
+        setIsLoading(false)
       } catch (error) {
         console.log(error);
       }
@@ -82,8 +83,7 @@ const ProductList = () => {
     return (
       <div>
         <PageTitle text="服務項目列表頁" />
-
-        {(products.length > 0 && currentUserData.role === 0) &&
+        {(!isLoading && products.length > 0 && currentUserData.role === 0) &&
           <ul className="product-card-group my-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4" >
             {products.map((item) => {
               return (
@@ -93,8 +93,8 @@ const ProductList = () => {
           </ul>
         }
 
-        {currentUserData.role === 1 &&
-          products.length > 0 ? <StudioTable data={products} /> : <Empty />
+        {(!isLoading && currentUserData.role === 1) &&
+          ( products.length > 0) ? <StudioTable data={products} /> : <Empty />
         }
       </div>
     );

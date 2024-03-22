@@ -29,3 +29,13 @@
 .overflow-y-scroll::-webkit-scrollbar-track {
   box-shadow: transparent;
 }
+/* utils */
+[class^="text-wrap-rule"] {
+  line-height: 1.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  max-height: calc(1.5em * var(--dataLineClamp));
+  -webkit-line-clamp: var(--dataLineClamp);
+}
